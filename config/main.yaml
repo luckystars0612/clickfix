@@ -1,0 +1,33 @@
+# ClickFix Web Application — Main Configuration
+# Edit this file and call GET /api/reload to apply changes without restart
+
+app:
+  name: "ClickFix Demo"
+  version: "2.0.0"
+  debug: false
+
+server:
+  host: "0.0.0.0"
+  port: 8080
+
+payload:
+  enabled: true
+  default_script: "default.js"    # file in payloads/ directory
+  per_lure: true                  # allow each lure to override the payload
+
+tracking:
+  enabled: true
+  log_visits: true
+  log_clicks: true
+
+lures:
+  default: "captcha"              # lure shown at GET /
+  auto_discover: true             # auto-load all .yaml files from config/lures/
+
+# ────────────────────────────────────────────────────────────────
+# How to add a new lure:
+#   1. Create config/lures/<name>.yaml  (with type, content, payload)
+#   2. Create web/templates/lures/<name>.html  (Jinja2 template)
+#   3. Call GET /api/reload  (or restart server)
+#   4. Visit http://host:8080/lure/<name>
+# ────────────────────────────────────────────────────────────────

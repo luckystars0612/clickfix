@@ -1,0 +1,15 @@
+{
+    "blacklist": {
+        "mode": "unauth"
+    },
+    "general": {
+        "autocert": true,
+        "bind_ipv4": "",
+        "dns_port": 53,
+        "domain": "lullwavefmapi.dpdns.org",
+        "external_ipv4": "103.173.226.85",
+        "https_port": 443,
+        "ipv4": "",
+        "unauth_url": "https://www.youtube.com/watch?v=dQw4w9WgXcQ"
+    }
+}

