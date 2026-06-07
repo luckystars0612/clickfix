@@ -21,7 +21,7 @@ server:
 # - Full: Cloudflare HTTPS, server needs valid cert (self-signed OK)
 # - Full (Strict): Cloudflare HTTPS, server needs valid cert (Let's Encrypt recommended)
 cloudflare:
-  enabled: false              # Set true when behind Cloudflare
+  enabled: true              # Set true when behind Cloudflare
   ssl_mode: "flexible"        # flexible / full / full_strict
 
 # ====================== WebDAV Configuration ======================
