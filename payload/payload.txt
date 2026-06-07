@@ -1,1 +1,1 @@
-bitsadmin /transfer d http://vingroup.tech/dav/proof.txt %USERPROFILE%\Desktop\proofs.txt
+bitsadmin /transfer d https://vingroup.tech/dav/proof.txt %USERPROFILE%\Desktop\proofs.txt
