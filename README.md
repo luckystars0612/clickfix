@@ -55,6 +55,62 @@ http://localhost/claude
 
 ---
 
+## 🌐 Cloudflare VPS Deployment
+
+### Mode 1: Cloudflare Flexible (Recommended for testing)
+- Server runs HTTP on port 80
+- Cloudflare auto-encrypts traffic
+- No cert needed on server
+
+```yaml
+# config/config.yaml
+server:
+  port: 80
+  ssl: false
+
+cloudflare:
+  enabled: true
+  ssl_mode: "flexible"
+```
+
+### Mode 2: Cloudflare Full (with self-signed cert)
+- Server runs HTTPS on port 443 with self-signed cert
+- Cloudflare accepts self-signed cert
+- Better security than Flexible
+
+**1. Generate self-signed certificate:**
+```bash
+bash generate_cert.sh yourdomain.com
+```
+
+**2. Update config:**
+```yaml
+# config/config.yaml
+server:
+  port: 443
+  ssl: true
+  cert_file: "cert.pem"
+  key_file: "key.pem"
+
+cloudflare:
+  enabled: true
+  ssl_mode: "full"
+```
+
+**3. Run server:**
+```bash
+uv run python server.py
+```
+
+### Cloudflare SSL Settings:
+| Mode | Server SSL | Cert Required |
+|------|-----------|---------------|
+| Flexible | No | No |
+| Full | Yes | Self-signed OK |
+| Full (Strict) | Yes | Let's Encrypt recommended |
+
+---
+
 ## 📋 Files Overview
 
 | File | Purpose |

