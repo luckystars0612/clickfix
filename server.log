@@ -1,0 +1,12 @@
+[+] WebDAV mounted at /dav
+======================================================================
+ClickFix Server Started!
+-> Phishing Page : http://0.0.0.0:80/claude
+-> WebDAV        : http://0.0.0.0:80/dav
+======================================================================
+INFO:     Started server process [8012]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+ERROR:    [Errno 10048] error while attempting to bind on address ('0.0.0.0', 80): [winerror 10048] only one usage of each socket address (protocol/network address/port) is normally permitted
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.

