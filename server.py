@@ -79,7 +79,7 @@ class AnonymousDomainController:
         return []
     
     def known_permissions(self, path_info, username):
-        return ["r", "w"]
+        return ["r"]
     
     def basic_auth_user(self, realm, user, password):
         return True
@@ -159,12 +159,12 @@ async def track_event(request: Request):
 @app.options("/")
 async def options_root():
     headers = {
-        "DAV": "1, 2",
+        "DAV": "1",  # Chỉ bật Class 1 (Chỉ đọc), bỏ Class 2 (Hỗ trợ khóa/ghi)
         "MS-Author-Via": "DAV",
-        "Allow": "OPTIONS, GET, HEAD, POST, PROPFIND, PROPPATCH, MKCOL, DELETE, PUT, COPY, MOVE",
+        "Allow": "OPTIONS, GET, HEAD, PROPFIND",  # Chỉ cho phép các lệnh đọc và duyệt file
         "Access-Control-Allow-Origin": "*",
-        "Access-Control-Allow-Methods": "GET, POST, OPTIONS, PROPFIND, PROPPATCH, MKCOL, DELETE, PUT, COPY, MOVE",
-        "Access-Control-Allow-Headers": "Content-Type, Depth, User-Agent, Translate, Overwrite, Destination, Lock-Token, If, Lock-Token, Timeout, X-Requested-With",
+        "Access-Control-Allow-Methods": "GET, OPTIONS, PROPFIND",
+        "Access-Control-Allow-Headers": "Content-Type, Depth, User-Agent, Translate, X-Requested-With",
         "Access-Control-Expose-Headers": "DAV, MS-Author-Via",
     }
     return Response(status_code=200, headers=headers)
@@ -172,14 +172,20 @@ async def options_root():
 # CORS middleware for WebDAV
 @app.middleware("http")
 async def webdav_cors(request: Request, call_next):
+    # CHẶN ĐỨNG các phương thức ghi/xóa ngay từ tầng Gateway nếu ai đó cố tình gửi lên
+    if "/dav" in request.url.path and request.method in ["PUT", "DELETE", "MKCOL", "MOVE", "COPY", "PROPPATCH"]:
+        return JSONResponse({"detail": "Method not allowed"}, status_code=405)
+
     response = await call_next(request)
+    
     if "/dav" in request.url.path:
         response.headers["Access-Control-Allow-Origin"] = "*"
-        response.headers["Access-Control-Allow-Methods"] = "GET, POST, OPTIONS, PROPFIND, PROPPATCH, MKCOL, DELETE, PUT, COPY, MOVE"
+        response.headers["Access-Control-Allow-Methods"] = "GET, OPTIONS, PROPFIND"
         response.headers["Access-Control-Allow-Headers"] = "*"
-        response.headers["DAV"] = "1, 2"
+        response.headers["DAV"] = "1"
         response.headers["MS-Author-Via"] = "DAV"
     return response
+    
 # ====================== START ======================
 if __name__ == "__main__":
     server_cfg = config.get("server", {})
