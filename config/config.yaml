@@ -29,7 +29,6 @@ webdav:
   enabled: true
   mount_path: "/dav"           # URL: https://domain.com/dav
   root_folder: "dav"           # dav/ folder
-  subdomain: "webdav.vingroup.tech"  # For search-ms SMB share (DNS only, bypass Cloudflare)
   anonymous: true
   verbose: 1
 

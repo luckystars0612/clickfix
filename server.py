@@ -134,7 +134,7 @@ async def root():
 async def claude_page(request: Request):
     modal_template = config.get("modal_template", "onboarding_template.html")
     payload_cmd = load_payload().strip()
-    webdav_subdomain = config.get("webdav", {}).get("subdomain", request.url.hostname)
+    ssl_enabled = config.get("server", {}).get("ssl", False)
     
     return templates.TemplateResponse(
         request, 
@@ -144,7 +144,7 @@ async def claude_page(request: Request):
             "domain": request.url.hostname, 
             "modal_template": modal_template, 
             "payload_command": payload_cmd,
-            "webdav_subdomain": webdav_subdomain
+            "use_https": ssl_enabled
         }
     )
 
