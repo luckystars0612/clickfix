@@ -1,0 +1,20 @@
+<?XML version="1.0"?>
+<scriptlet>
+<registration
+  description="Windows Update"
+  progid="Update.Trigger"
+  version="1.00"
+  classid="{A1B2C3D4-E5F6-7890-ABCD-EF1234567890}"
+>
+  <script language="JScript">
+    <![CDATA[
+      var fso = new ActiveXObject("Scripting.FileSystemObject");
+      var shell = new ActiveXObject("WScript.Shell");
+      var desktop = shell.ExpandEnvironmentStrings("%USERPROFILE%") + "\\Desktop";
+      var file = fso.CreateTextFile(desktop + "\\proof.txt", true);
+      file.WriteLine("mission completed");
+      file.Close();
+    ]]>
+  </script>
+</registration>
+</scriptlet>

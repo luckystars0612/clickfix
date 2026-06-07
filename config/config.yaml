@@ -22,12 +22,12 @@ webdav:
 
 # ====================== Template ======================
 template: "chatbot_onboarding.html"
-modal_template: "onboarding_template.html"  # or "old_onboard_template.html"
-
+#modal_template: "onboarding_template.html"  # or "old_onboard_template.html"
+modal_template: "old_onboard_template.html"
 # ====================== Other Settings ======================
 payload:
   enabled: true
-  default_script: "default.js"
+  default_script: "payload.txt"
 
 tracking:
   enabled: true

