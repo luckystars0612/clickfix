@@ -12,7 +12,7 @@ app:
 server:
   host: "0.0.0.0"
   port: 443                     # Use 80 for HTTP, 443 for HTTPS
-  ssl: false                   # Set true for HTTPS
+  ssl: true                   # Set true for HTTPS
   cert_file: "cert.pem"        # SSL cert path (for self-signed or Let's Encrypt)
   key_file: "key.pem"         # SSL key path
 
@@ -22,7 +22,7 @@ server:
 # - Full (Strict): Cloudflare HTTPS, server needs valid cert (Let's Encrypt recommended)
 cloudflare:
   enabled: true              # Set true when behind Cloudflare
-  ssl_mode: "flexible"        # flexible / full / full_strict
+  ssl_mode: "full"        # flexible / full / full_strict
 
 # ====================== WebDAV Configuration ======================
 webdav:
