@@ -35,8 +35,8 @@ webdav:
 
 # ====================== Template ======================
 template: "chatbot_onboarding.html"
-modal_template: "old_onboard_template.html"
-
+#modal_template: "old_onboard_template.html"
+modal_template: "onboarding_template.html"
 # ====================== Payload ======================
 payload:
   enabled: true
