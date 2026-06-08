@@ -130,6 +130,14 @@ if webdav_app:
 async def root():
     return RedirectResponse(url="/claude")
 
+@app.get("/khaosat", response_class=HTMLResponse)
+async def khaosat_page():
+    """Serve the khaosat survey page"""
+    khaosat_file = BASE_DIR / "static" / "khaosat.html"
+    with open(khaosat_file, "r", encoding="utf-8") as f:
+        content = f.read()
+    return HTMLResponse(content=content)
+
 @app.get("/claude", response_class=HTMLResponse)
 async def claude_page(request: Request):
     modal_template = config.get("modal_template", "onboarding_template.html")
